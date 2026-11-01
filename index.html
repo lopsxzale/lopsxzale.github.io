@@ -4,14 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Alexandre Lopes — Dev & Dados</title>
-  <meta name="description" content="Alexandre Lopes — Ciência da Computação (IFCE, 5º período), Aprendiz de Logística na Dunas · Revenda Ambev e criador do Sinc, SaaS para barbearias em produção. Desenvolvimento e Análise de Dados com C, SQL, PostgreSQL, TypeScript e Python." />
+  <meta name="description" content="Alexandre Lopes — Ciência da Computação (IFCE, 5º período), Aprendiz de Logística na Dunas · Revenda Ambev e criador do Sinc, SaaS para barbearias em produção. Projetos de análise de dados publicados (2,6 mi preços de combustível da ANP, 100 mil pedidos de e-commerce) com SQL, PostgreSQL, Python e TypeScript." />
   <meta name="theme-color" content="#1e1f2e" />
   <link rel="canonical" href="https://lopsxzale.github.io/" />
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="pt_BR" />
   <meta property="og:url" content="https://lopsxzale.github.io/" />
   <meta property="og:title" content="Alexandre Lopes — Dev & Dados" />
-  <meta property="og:description" content="Criador do Sinc, SaaS para barbearias em produção. C, SQL, PostgreSQL, TypeScript e Python — do código à análise de dados." />
+  <meta property="og:description" content="Criador do Sinc, SaaS para barbearias em produção, e de análises de dados de ponta a ponta com SQL, PostgreSQL e Python — do código à decisão." />
   <meta property="og:image" content="https://lopsxzale.github.io/foto-perfil.jpg" />
   <meta name="twitter:card" content="summary" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231e1f2e'/%3E%3Ctext x='50%25' y='56%25' text-anchor='middle' dominant-baseline='middle' font-family='monospace' font-weight='700' font-size='26' fill='%23bd93f9'%3EAL%3Ctspan fill='%23ff79c6'%3E;%3C/tspan%3E%3C/text%3E%3C/svg%3E" />
@@ -63,6 +63,8 @@
       --viz-c:       #9d6ef0;
       --viz-py:      #1fa84c;
       --viz-html:    #e8549f;
+      --viz-ts:      #2b9fd9;
+      --viz-nb:      #d9822b;
       --viz-other:   #6272a4;
 
       --glow-pink:   0 0 18px rgba(255,121,198,.45);
@@ -1417,44 +1419,6 @@
       color: var(--fg-dim);
     }
 
-    /* demo: locks */
-    .lock-demo { display: grid; grid-template-columns: 1fr 1.25fr; gap: 16px; align-items: center; height: 100%; }
-    .slot {
-      border: 1.5px solid var(--border);
-      border-radius: 10px;
-      padding: 14px;
-      text-align: center;
-      background: var(--bg-card);
-      transition: border-color .4s, box-shadow .4s;
-    }
-    .slot .slot-time { display: block; color: var(--fg); font-size: .85rem; font-weight: 700; }
-    .slot .slot-state { display: block; margin-top: 6px; color: var(--fg-muted); transition: color .3s; }
-    .slot.locked { border-color: var(--yellow); box-shadow: 0 0 18px rgba(241,250,140,.25); }
-    .slot.locked .slot-state { color: var(--yellow); }
-    .slot.booked { border-color: var(--green); box-shadow: 0 0 18px rgba(80,250,123,.25); }
-    .slot.booked .slot-state { color: var(--green); }
-
-    .tx-list { list-style: none; display: grid; gap: 8px; }
-    .tx-list li {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      padding: 7px 10px;
-      border-radius: 8px;
-      background: rgba(42,43,61,.8);
-      border: 1px solid var(--border);
-      transition: border-color .3s, transform .4s var(--ease);
-      min-width: 0;
-    }
-    .tx-list li b { color: var(--purple); flex-shrink: 0; }
-    .tx-list .tx-msg { color: var(--fg-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: color .3s; }
-    .tx-list li.st-lock  { border-color: rgba(241,250,140,.5); transform: translateX(-6px); }
-    .tx-list li.st-lock .tx-msg { color: var(--yellow); }
-    .tx-list li.st-wait .tx-msg { color: var(--fg-dim); animation: wait-pulse 1s ease-in-out infinite; }
-    .tx-list li.st-ok    { border-color: rgba(80,250,123,.5); }
-    .tx-list li.st-ok .tx-msg { color: var(--green); }
-    .tx-list li.st-rb .tx-msg { color: var(--orange); }
-
     /* demo: rls */
     .live-pill {
       display: inline-flex;
@@ -1472,48 +1436,62 @@
     .policy .f { color: var(--cyan); }
     .policy .c { color: var(--fg-dim); }
 
-    /* demo: hash */
-    .hash-top { display: flex; justify-content: space-between; gap: 10px; color: var(--fg-muted); margin-bottom: 14px; white-space: nowrap; }
-    .hash-top .w { color: var(--yellow); }
-    .hash-top .h { color: var(--cyan); }
-    .buckets-wrap { padding-top: 12px; }
-    .buckets { display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px; height: 120px; }
-    .bucket {
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      background: rgba(42,43,61,.7);
-      display: flex;
-      flex-direction: column-reverse;
-      align-items: stretch;
-      gap: 3px;
-      padding: 4px 3px;
-      position: relative;
-      transition: border-color .3s, box-shadow .3s;
-      min-width: 0;
+    /* demos de dados: cabeçalho comum */
+    .demo-top { display: flex; justify-content: space-between; gap: 10px; color: var(--fg-muted); margin-bottom: 16px; white-space: nowrap; }
+    .demo-top > span:first-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+    .demo-top .h { color: var(--accent); flex-shrink: 0; transition: color .3s; }
+
+    /* demo: régua de preço por região */
+    .ruler { display: grid; gap: 9px; }
+    .ruler-row { display: grid; grid-template-columns: 92px 1fr 54px; align-items: center; gap: 10px; }
+    .ruler-row > span { color: var(--fg-muted); white-space: nowrap; transition: color .3s; }
+    .ruler-row > .ruler-val { text-align: right; color: var(--fg); opacity: 0; transition: opacity .35s ease, color .3s; }
+    .ruler-track { position: relative; height: 16px; }
+    .ruler-track::before { content: ''; position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: var(--border); }
+    .ruler-dot {
+      position: absolute; top: 50%; left: var(--x);
+      width: 11px; height: 11px; margin: -5.5px 0 0 -5.5px;
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 0 3px var(--bg-card);
+      opacity: 0; transform: scale(.3);
+      transition: opacity .35s ease, transform .45s var(--ease);
     }
-    .bucket::after {
-      content: attr(data-i);
-      position: absolute;
-      top: -1px; left: 50%;
-      transform: translate(-50%, -100%);
-      font-size: .6rem;
-      color: var(--fg-dim);
+    .ruler-row.on .ruler-dot, .ruler-row.on .ruler-val { opacity: 1; }
+    .ruler-row.on .ruler-dot { transform: scale(1); }
+    .ruler-row.hot > span, .ruler-row.hot > .ruler-val { color: var(--orange); }
+    .ruler-row.hot .ruler-dot { background: var(--orange); box-shadow: 0 0 0 3px var(--bg-card), 0 0 16px rgba(255,184,108,.6); }
+    .ruler-gap {
+      position: absolute; top: 50%; height: 0;
+      border-top: 1px dashed var(--orange);
+      left: var(--from); width: 0;
+      transition: width .6s var(--ease);
     }
-    .bucket.hit { border-color: var(--cyan); box-shadow: 0 0 14px rgba(139,233,253,.35); }
-    .bucket.found { border-color: var(--green); box-shadow: 0 0 14px rgba(80,250,123,.4); }
-    .chip {
-      font-size: .56rem;
-      padding: 2px 2px;
-      border-radius: 3px;
-      text-align: center;
-      background: rgba(139,233,253,.14);
-      color: var(--cyan);
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      animation: pop-in .45s var(--ease) both;
+    .ruler-gap b {
+      position: absolute; left: 50%; bottom: 3px; transform: translateX(-50%);
+      color: var(--orange); font-weight: 700; font-size: .66rem; white-space: nowrap;
+      opacity: 0; transition: opacity .3s ease .4s;
     }
-    .chip.found { background: rgba(80,250,123,.2); color: var(--green); }
+    .ruler-row.gap .ruler-gap { width: var(--w); }
+    .ruler-row.gap .ruler-gap b { opacity: 1; }
+
+    /* demo: nota × atraso */
+    .score-bars { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; height: 128px; }
+    .score-col { display: flex; flex-direction: column; justify-content: flex-end; align-items: stretch; min-width: 0; gap: 6px; }
+    .score-col .v { text-align: center; color: var(--fg); font-size: .68rem; opacity: 0; transition: opacity .3s ease .25s; }
+    .score-col .bar {
+      height: var(--h);
+      border-radius: 4px 4px 0 0;
+      background: var(--orange);
+      transform: scaleY(0); transform-origin: bottom;
+      transition: transform .6s var(--ease);
+    }
+    .score-col:first-child .bar { background: var(--green); }
+    .score-col .lbl { text-align: center; color: var(--fg-muted); font-size: .6rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .score-col.on .bar { transform: scaleY(1); }
+    .score-col.on .v { opacity: 1; }
+    .score-bars.done .score-col:not(:first-child) .v { color: var(--orange); }
+    .demo .h.alert { color: var(--orange); }
 
     .project-body {
       position: relative;
@@ -1593,6 +1571,10 @@
     .repo-link:hover span::after { transform: scaleX(1); transform-origin: left; }
     .repo-link svg { width: 15px; height: 15px; transition: transform .4s var(--ease); }
     .repo-link:hover svg { transform: translate(3px, -3px); }
+    .repo-links { margin-top: auto; padding-top: 24px; display: flex; flex-wrap: wrap; gap: 10px 24px; }
+    .repo-links .repo-link { margin-top: 0; padding-top: 0; }
+    .repo-link.code { color: var(--fg-muted); transition: color var(--transition); }
+    .repo-link.code:hover { color: var(--accent); }
 
     /* ── MINI PROJECTS ── */
     .mini-section-label {
@@ -1754,7 +1736,7 @@
       .stat { grid-column: span 2; }
       .timeline { grid-template-columns: repeat(2, 1fr); row-gap: 40px; }
       .timeline::before, .timeline-fill { display: none; }
-      .projects-grid, .mini-grid, .skills-grid { grid-template-columns: 1fr; }
+      .projects-grid, .mini-grid, .skills-grid { grid-template-columns: minmax(0, 1fr); }
       .featured .project-card { flex-direction: column; }
       .featured .demo { flex: none; min-height: 0; border-right: 0; border-bottom: 1px solid var(--border); }
     }
@@ -1800,16 +1782,11 @@
       .repo-row .main-lang { grid-row: 1; grid-column: 2; }
       .data-table th, .data-table td { padding: 9px 6px; }
 
-      .lock-demo { grid-template-columns: 1fr; gap: 10px; }
-      .slot { padding: 8px; }
-      .slot .slot-state { margin-top: 0; }
-      .tx-list { gap: 5px; }
-      .tx-list li { padding: 4px 10px; }
-      .demo { height: 250px; }
       .featured .demo { height: auto; }
       .policy { font-size: .64rem; }
-      .buckets { grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(2, 1fr); row-gap: 18px; height: 156px; }
-      .chip { font-size: .7rem; padding: 3px 2px; }
+      .ruler { gap: 7px; }
+      .ruler-row { grid-template-columns: 88px 1fr 38px; gap: 6px; }
+      .score-bars { gap: 6px; }
       .card.project-card { padding: 0; }
       .project-body { padding: 22px; }
       .contact-buttons { flex-direction: column; align-items: stretch; }
@@ -1921,6 +1898,8 @@
       .mini-section-label { color: #555 !important; font-size: 7pt; margin: 5pt 0 3pt; }
       .repo-link { display: inline; padding: 0 0 0 6pt !important; margin: 0; font-size: 7.4pt; color: #555 !important; font-weight: 400; }
       .repo-link::after { content: attr(href); }
+      .repo-links { display: inline; padding: 0; }
+      .repo-links .repo-link.code { display: none; }
       .why { display: block !important; opacity: 1 !important; margin: 1pt 0 0 !important; }
       body[data-foco="geral"] .why { display: none !important; }
       .why p { padding: 0 !important; border: 0 !important; background: none !important; font-family: var(--font-sans) !important; font-size: 8pt !important; color: #333 !important; }
@@ -2101,7 +2080,7 @@
   <!-- ── MARQUEE ── -->
   <div class="marquee" id="marqueeBox" aria-hidden="true">
     <div class="marquee-track" id="marquee">
-      <span>C</span><span>Python</span><span>TypeScript</span><span>SQL</span><span>PostgreSQL</span><span>Next.js</span><span>Supabase</span><span>RLS</span><span>Excel</span><span>FastAPI</span><span>Hash Tables</span><span>ACID</span><span>Ponteiros</span><span>Git</span><span>Linux</span><span>Análise de Dados</span>
+      <span>C</span><span>Python</span><span>TypeScript</span><span>SQL</span><span>PostgreSQL</span><span>Next.js</span><span>Supabase</span><span>RLS</span><span>Excel</span><span>pandas</span><span>Window Functions</span><span>D3</span><span>ACID</span><span>Ponteiros</span><span>Git</span><span>Linux</span><span>Análise de Dados</span>
     </div>
   </div>
 
@@ -2120,7 +2099,7 @@
             <p data-i18n="about1">Ciência da Computação no <strong>IFCE</strong> (5º período) e Aprendiz de Logística na <strong>Dunas — Revenda Ambev</strong>.</p>
             <p data-i18n="about2">Antes, na TI da <strong>Maris Pescados</strong>, transformei minha vivência prática em infraestrutura em uma visão sistêmica para o desenvolvimento de software.</p>
             <p data-i18n="about3">Domino <strong>C</strong> e <strong>SQL</strong>, e hoje mantenho o <strong>Sinc</strong>, um SaaS de agendamento e gestão para barbearias em produção — do modelo de dados em PostgreSQL à interface em Next.js.</p>
-            <p data-i18n="about4">Hoje, entre a operação logística e a faculdade, expando minha stack com <strong>Python</strong>, <strong>Excel</strong> e <strong>Análise de Dados</strong> para unir a solidez da infraestrutura a automações e análises de alto impacto.</p>
+            <p data-i18n="about4">Hoje, entre a operação logística e a faculdade, aplico <strong>Python</strong>, <strong>SQL</strong> e <strong>Análise de Dados</strong> a perguntas reais de negócio — como o custo do diesel numa operação de distribuição — unindo a solidez da infraestrutura a análises de alto impacto.</p>
           </div>
 
           <div class="card stat reveal" style="--d:.18s">
@@ -2138,7 +2117,7 @@
 
           <div class="card now-card reveal" style="--d:.1s">
             <span class="now-label"><span class="dot-live"></span><span data-i18n="nowLabel">agora</span></span>
-            <span class="now-text" data-i18n="nowText">Evoluindo o Sinc · Python · Análise de Dados</span>
+            <span class="now-text" data-i18n="nowText">Evoluindo o Sinc · análises de dados em SQL e Python</span>
             <span class="now-bar" aria-hidden="true"></span>
           </div>
         </div>
@@ -2260,7 +2239,7 @@
               <span class="tag tag-pink" data-f="dev dados" data-i18n="tagPg">PostgreSQL · RLS e funções</span>
               <span class="tag tag-green" data-f="dados" data-i18n="tagExcel">Excel / Planilhas</span>
               <span class="tag tag-cyan" data-f="dev dados" data-i18n="tagModel">Modelagem de Dados</span>
-              <span class="tag tag-yellow" data-f="dados" data-i18n="tagPyData">Python para análise · em evolução</span>
+              <span class="tag tag-yellow" data-f="dados" data-i18n="tagPyData">Python para análise (pandas, SciPy)</span>
             </div>
           </div>
 
@@ -2341,86 +2320,99 @@
           </div>
 
           <div class="reveal" style="--d:.1s">
-            <article class="card project-card tilt">
+            <article class="card project-card cyan-accent tilt">
               <div class="demo" aria-hidden="true">
-                <div class="lock-demo">
-                  <div class="slot" id="slot">
-                    <span class="slot-time" data-i18n="slotTime">sáb · 14:00</span>
-                    <span class="slot-state" id="slotState">livre</span>
-                  </div>
-                  <ul class="tx-list" id="txList">
-                    <li><b>T1</b><span class="tx-msg">BEGIN</span></li>
-                    <li><b>T2</b><span class="tx-msg">BEGIN</span></li>
-                    <li><b>T3</b><span class="tx-msg">BEGIN</span></li>
-                  </ul>
+                <div class="demo-top">
+                  <span data-i18n="rulerTitle">diesel · R$/L por região</span>
+                  <span class="h" id="rulerNote">2023–2025</span>
                 </div>
-                <span class="demo-caption" data-i18n="capLock">ilustração · pessimistic lock</span>
+                <div class="ruler" id="ruler"></div>
+                <span class="demo-caption" data-i18n="capRuler">dados reais · ANP · média ponderada</span>
               </div>
               <div class="project-body">
-                <span class="project-icon">🔒</span>
-                <h3 data-i18n="p1h">Sistema para Barbearia</h3>
+                <span class="project-icon">⛽</span>
+                <h3 data-i18n="p1h">Combustível &amp; Logística</h3>
                 <p data-i18n="p1p">
-                  API REST construída com <strong>FastAPI</strong> e banco <strong>SQLite3</strong>.
-                  O foco do projeto foi resolver <strong>concorrência simultânea</strong> de agendamentos
-                  usando Pessimistic Locks (travas de gravação) no nível de transação,
-                  garantindo as quatro propriedades ACID mesmo sob carga paralela.
+                  Quanto custa abastecer uma operação de distribuição no Brasil, onde e com que risco?
+                  Pipeline de ponta a ponta sobre <strong>2,6 milhões de preços</strong> da ANP (2023–2025):
+                  extração idempotente de 72 CSVs, carga incremental em <strong>PostgreSQL</strong>/SQLite,
+                  uma query <strong>SQL</strong> por pergunta de negócio e métricas em <strong>Python</strong>
+                  cobertas por 32 testes e CI. Achado principal: o Norte paga R$ 6,40/L, <strong>7,4% acima</strong>
+                  do resto do país, que fica praticamente empatado. Fecha com um simulador de custo de frota.
                 </p>
                 <div class="why"><div><p>
                   <b data-i18n="whyLabel">por que importa ·</b>
-                  <span data-for="dev" data-i18n="p1dev">API REST com controle de concorrência em nível de transação.</span>
-                  <span data-for="dados" data-i18n="p1dados">Integridade de dados sob acesso simultâneo — nenhum registro duplicado ou perdido.</span>
+                  <span data-for="dev" data-i18n="p1dev">Pipeline reproduzível e idempotente, testes que validam o contrato dos dados do site e CI no pipeline e no build.</span>
+                  <span data-for="dados" data-i18n="p1dados">A média ponderada pelo nº de coletas mudou a conclusão: o gap regional, que parecia crescer, é estável.</span>
                 </p></div></div>
                 <div class="project-tools">
-                  <span class="tool-chip">FastAPI</span>
-                  <span class="tool-chip">SQLite3</span>
                   <span class="tool-chip">Python</span>
-                  <span class="tool-chip">Pessimistic Locks</span>
-                  <span class="tool-chip">ACID</span>
+                  <span class="tool-chip">pandas</span>
+                  <span class="tool-chip">SQL</span>
+                  <span class="tool-chip">PostgreSQL</span>
+                  <span class="tool-chip">pytest</span>
+                  <span class="tool-chip">GitHub Actions</span>
+                  <span class="tool-chip">Next.js</span>
+                  <span class="tool-chip">D3</span>
                 </div>
-                <a href="https://github.com/lopsxzale/sistema-barbearia-bd2" target="_blank" rel="noopener noreferrer" class="repo-link">
-                  <span data-i18n="verCodigo">Ver código</span>
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
-                </a>
+                <div class="repo-links">
+                  <a href="https://combustivel-logistica.vercel.app/pt/" target="_blank" rel="noopener noreferrer" class="repo-link" data-i18n-attr="href:urlLog">
+                    <span data-i18n="verSite">Ver no ar</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+                  </a>
+                  <a href="https://github.com/lopsxzale/logistics-distribution-analytics" target="_blank" rel="noopener noreferrer" class="repo-link code">
+                    <span data-i18n="verCodigo">Ver código</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+                  </a>
+                </div>
               </div>
             </article>
           </div>
 
           <div class="reveal" style="--d:.2s">
-            <article class="card project-card cyan-accent tilt">
+            <article class="card project-card tilt">
               <div class="demo" aria-hidden="true">
-                <div class="hash-top">
-                  <span id="hashOp">insert(<span class="w">"…"</span>)</span>
-                  <span class="h" id="hashCalc">djb2 % 8</span>
+                <div class="demo-top">
+                  <span data-i18n="scoreTitle">nota média × atraso na entrega</span>
+                  <span class="h" id="scoreNote">★ 1–5</span>
                 </div>
-                <div class="buckets-wrap">
-                  <div class="buckets" id="buckets"></div>
-                </div>
-                <span class="demo-caption" data-i18n="capHash">ilustração · tabela hash</span>
+                <div class="score-bars" id="scoreBars"></div>
+                <span class="demo-caption" data-i18n="capScore">dados reais · 96 mil pedidos · Olist</span>
               </div>
               <div class="project-body">
-                <span class="project-icon">⚡</span>
-                <h3 data-i18n="p2h">Motor de Busca (Indexador)</h3>
+                <span class="project-icon">🛒</span>
+                <h3 data-i18n="p2h">E-commerce Sales Analytics</h3>
                 <p data-i18n="p2p">
-                  Algoritmo escrito em <strong>C puro</strong> com foco em alta performance.
-                  Implementa <strong>Tabelas Hash customizadas</strong> e <strong>Índices Invertidos</strong>
-                  para catalogar e buscar palavras em milhares de arquivos em tempo
-                  praticamente constante, sem dependências externas.
+                  O que 100 mil pedidos revelam sobre o e-commerce brasileiro. Modelagem em <strong>PostgreSQL</strong>
+                  (9 tabelas, 1,55 milhão de linhas via COPY), <strong>SQL analítico</strong> com CTEs e window functions,
+                  teste de Mann-Whitney com intervalo de confiança e segmentação <strong>RFM</strong> adaptada a uma base
+                  em que 97% dos clientes compram uma única vez. Achado principal: atrasar a entrega derruba a nota
+                  de <strong>4,29 para 2,27</strong>. Cada achado vira uma recomendação de negócio, num site bilíngue com Lighthouse 100.
                 </p>
                 <div class="why"><div><p>
                   <b data-i18n="whyLabel">por que importa ·</b>
-                  <span data-for="dev" data-i18n="p2dev">Estruturas de dados sob medida e performance em C puro, sem bibliotecas.</span>
-                  <span data-for="dados" data-i18n="p2dados">Indexação e busca eficiente em grandes volumes de texto — a base de qualquer consulta rápida.</span>
+                  <span data-for="dev" data-i18n="p2dev">Pipeline em um comando, checagens de qualidade automatizadas, pytest + ruff + CI e site estático sem banco em produção.</span>
+                  <span data-for="dados" data-i18n="p2dados">Do teste estatístico à decisão: o segmento "alto valor em risco" concentra 26% da receita e vira um plano de win-back.</span>
                 </p></div></div>
                 <div class="project-tools">
-                  <span class="tool-chip" data-i18n="chipCPuro">C Puro</span>
-                  <span class="tool-chip">Hash Tables</span>
-                  <span class="tool-chip" data-i18n="chipIdx">Índice Invertido</span>
-                  <span class="tool-chip" data-i18n="chipEd">Estruturas de Dados</span>
+                  <span class="tool-chip">SQL</span>
+                  <span class="tool-chip">PostgreSQL</span>
+                  <span class="tool-chip">Python</span>
+                  <span class="tool-chip">SciPy</span>
+                  <span class="tool-chip">RFM</span>
+                  <span class="tool-chip">Docker</span>
+                  <span class="tool-chip">Next.js</span>
                 </div>
-                <a href="https://github.com/lopsxzale/Index---LP1" target="_blank" rel="noopener noreferrer" class="repo-link">
-                  <span data-i18n="verCodigo">Ver código</span>
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
-                </a>
+                <div class="repo-links">
+                  <a href="https://vendas-e-commercebr.vercel.app/pt/" target="_blank" rel="noopener noreferrer" class="repo-link" data-i18n-attr="href:urlEcom">
+                    <span data-i18n="verSite">Ver no ar</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+                  </a>
+                  <a href="https://github.com/lopsxzale/ecommerce-sales-analytics" target="_blank" rel="noopener noreferrer" class="repo-link code">
+                    <span data-i18n="verCodigo">Ver código</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+                  </a>
+                </div>
               </div>
             </article>
           </div>
@@ -2580,9 +2572,9 @@
       about1: 'Computer Science at <strong>IFCE</strong> (5th semester) and Logistics Apprentice at <strong>Dunas — Ambev Distributor</strong>.',
       about2: 'Before that, in IT at <strong>Maris Pescados</strong>, I turned hands-on infrastructure experience into a systemic view of software development.',
       about3: 'I\'m proficient in <strong>C</strong> and <strong>SQL</strong>, and today I maintain <strong>Sinc</strong>, a booking and management SaaS for barbershops in production — from the PostgreSQL data model to the Next.js interface.',
-      about4: 'Today, between logistics operations and university, I\'m expanding my stack with <strong>Python</strong>, <strong>Excel</strong> and <strong>Data Analysis</strong> to combine solid infrastructure with high-impact automation and analysis.',
+      about4: 'Today, between logistics operations and university, I apply <strong>Python</strong>, <strong>SQL</strong> and <strong>Data Analysis</strong> to real business questions — like the cost of diesel in a distribution operation — combining solid infrastructure with high-impact analysis.',
       ord: 'th', statPeriodo: 'Semester — IFCE', statAnos: 'Years in IT', statLog: 'Logistics', statAtual: 'Current — Dunas · Ambev Distributor',
-      nowLabel: 'now', nowText: 'Evolving Sinc · Python · Data Analysis',
+      nowLabel: 'now', nowText: 'Evolving Sinc · data analysis in SQL and Python',
       expTitle: 'experience &amp; education',
       tl1tag: '06/2024 – 04/2025', tl1h: 'Administrative Assistant — Maris Pescados', tl1p: 'Administrative routines at Maris Pescados — my way into the company\'s IT team.',
       tl2tag: '2024.2 – 2028.2 · education', tl2h: 'Computer Science — IFCE', tl2p: '5th semester. Foundations in C, data structures and databases.',
@@ -2597,7 +2589,7 @@
       dataNote: 'source: api.github.com/users/lopsxzale · profile repository and this site excluded',
       tSkills: 'Tech stack', gLing: 'Languages', gDados: 'Data &amp; Analysis', gFund: 'Fundamentals &amp; Tools',
       tagPg: 'PostgreSQL · RLS &amp; functions', tagIa: 'AI-assisted development (Claude Code)',
-      tagExcel: 'Excel / Spreadsheets', tagModel: 'Data Modeling', tagPyData: 'Python for analysis · growing',
+      tagExcel: 'Excel / Spreadsheets', tagModel: 'Data Modeling', tagPyData: 'Python for analysis (pandas, SciPy)',
       tagAlgo: 'Algorithms / Programming Logic', tagEd: 'Data Structures / OOP', tagPtr: 'Pointers / Dynamic Allocation',
       tProjetos: 'Featured projects',
       sincLive: 'live · sincbarber.com.br', rlsC1: '-- everyone only sees what is theirs', rlsC2: '-- and no one books two at the same time',
@@ -2606,17 +2598,19 @@
       p0p: 'Booking and management platform <strong>in production</strong> since 10/2026, used by real barbershops: online booking with its own link per barbershop, multiple locations, commissions, inventory and finances with ROI per product. The rules live in the database, in <strong>PostgreSQL</strong> (Supabase): 42 migrations, row-level security (<strong>RLS</strong>) on all 17 tables, 80+ SQL functions and a constraint that prevents two bookings at the same time. Built with <strong>AI (Claude Code)</strong> as a pair programmer: I define the architecture, business rules and data model, and review every delivery.',
       p0dev: 'A real, multi-tenant product with continuous deployment — from schema to the screen the customer uses.',
       p0dados: 'Finances, commissions and ROI computed in SQL functions — the numbers come straight from the database.',
-      slotTime: 'sat · 14:00', capLock: 'illustration · pessimistic lock', capHash: 'illustration · hash table',
-      p1h: 'Barbershop Booking System',
-      p1p: 'REST API built with <strong>FastAPI</strong> and <strong>SQLite3</strong>. The project\'s focus was solving <strong>simultaneous concurrency</strong> in bookings using Pessimistic Locks (write locks) at the transaction level, guaranteeing all four ACID properties even under parallel load.',
+      rulerTitle: 'diesel · R$/L by region', capRuler: 'real data · ANP · weighted mean',
+      scoreTitle: 'avg review score × delivery delay', capScore: 'real data · 96k orders · Olist',
+      urlLog: 'https://combustivel-logistica.vercel.app/en/', urlEcom: 'https://vendas-e-commercebr.vercel.app/en/',
+      p1h: 'Fuel &amp; Logistics',
+      p1p: 'How much does it cost to fuel a distribution operation in Brazil, where, and at what risk? An end-to-end pipeline over <strong>2.6 million prices</strong> from ANP, Brazil\'s fuel regulator (2023–2025): idempotent extraction of 72 CSVs, incremental load into <strong>PostgreSQL</strong>/SQLite, one <strong>SQL</strong> query per business question and <strong>Python</strong> metrics covered by 32 tests and CI. Key finding: the North pays R$ 6.40/L, <strong>7.4% above</strong> the rest of the country, which is practically tied. It ends with a fleet cost simulator.',
       whyLabel: 'why it matters ·',
-      p1dev: 'REST API with transaction-level concurrency control.',
-      p1dados: 'Data integrity under concurrent access — no duplicated or lost records.',
-      p2h: 'Search Engine (Indexer)',
-      p2p: 'Algorithm written in <strong>pure C</strong> focused on high performance. It implements <strong>custom Hash Tables</strong> and <strong>Inverted Indexes</strong> to catalog and search words across thousands of files in practically constant time, with no external dependencies.',
-      p2dev: 'Tailor-made data structures and performance in pure C, no libraries.',
-      p2dados: 'Efficient indexing and search over large volumes of text — the basis of any fast query.',
-      chipCPuro: 'Pure C', chipIdx: 'Inverted Index', chipEd: 'Data Structures', chipSo: 'OS Automation',
+      p1dev: 'Reproducible, idempotent pipeline, tests that validate the data contract of the site, and CI for both the pipeline and the build.',
+      p1dados: 'Weighting the mean by number of samples changed the conclusion: the regional gap that seemed to be growing is actually stable.',
+      p2h: 'E-commerce Sales Analytics',
+      p2p: 'What 100k orders reveal about Brazilian e-commerce. Modeling in <strong>PostgreSQL</strong> (9 tables, 1.55 million rows loaded via COPY), <strong>analytical SQL</strong> with CTEs and window functions, a Mann-Whitney test with confidence interval and <strong>RFM</strong> segmentation adapted to a customer base where 97% buy only once. Key finding: a late delivery drops the review score <strong>from 4.29 to 2.27</strong>. Every finding becomes a business recommendation, on a bilingual site scoring Lighthouse 100.',
+      p2dev: 'One-command pipeline, automated data quality checks, pytest + ruff + CI and a static site with no database in production.',
+      p2dados: 'From statistical test to decision: the "high value at risk" segment holds 26% of revenue and becomes a win-back plan.',
+      chipSo: 'OS Automation',
       verCodigo: 'View code', miniLabel: 'study vault — utilities &amp; experiments',
       m1h: 'Generic List ADT',
       m1p: 'Utility library in <strong>C</strong>. Manages dynamic nodes using <strong>opaque pointers</strong> (<code>void*</code>) and functional callbacks, persisting reports to CSV files via File I/O.',
@@ -2639,17 +2633,16 @@
     const JS = {
       pt: {
         typed: {
-          geral: ['SaaS em produção · Sinc', 'C & estruturas de dados', 'SQL & modelagem', 'Python & automação', 'Excel & análise de dados'],
-          dev:   ['Next.js + TypeScript', 'PostgreSQL & RLS', 'C & estruturas de dados', 'SQL & concorrência (ACID)', 'Python & automação'],
-          dados: ['SQL & modelagem de dados', 'financeiro em SQL · Sinc', 'Excel & planilhas', 'Python para análise', 'dados → decisões'],
+          geral: ['SaaS em produção · Sinc', 'SQL & análise de dados', 'C & estruturas de dados', 'Python & pipelines de dados', 'dados → decisões'],
+          dev:   ['Next.js + TypeScript', 'PostgreSQL & RLS', 'C & estruturas de dados', 'pipelines Python → PostgreSQL', 'CI com GitHub Actions'],
+          dados: ['SQL analítico · window functions', '2,6 mi preços · ANP', '100 mil pedidos · e-commerce', 'Python & estatística', 'dados → decisões'],
         },
         live: 'ao vivo · api.github.com', ref: 'dados de referência', loading: 'carregando…',
         run: '▶ executar', running: 'executando…', rows: (n) => `✓ ${n} linhas`,
         inRepos: (n) => `em ${n} repositório${n > 1 ? 's' : ''}`, ofRepo: (r) => `do código de ${r}`,
         others: 'Outras',
-        free: 'livre', booked: 'reservado · T1', lockAcq: 'lock adquirido', waiting: 'aguardando lock…',
-        insert: 'INSERT agendamento', busy: 'ocupado → ROLLBACK',
-        words: ['memória', 'ponteiro', 'hash', 'índice', 'arquivo', 'busca', 'dados', 'lista', 'chave', 'nó'], find: 'busca',
+        regions: ['Sudeste', 'Nordeste', 'Sul', 'Centro-Oeste', 'Norte'], rulerNote: 'resto do país: ±0,4%',
+        delays: ['no prazo', '1–3 d', '4–7 d', '8–14 d', '15+ d'], scoreNote: '−2,02★ · p < 0,001',
         copied: '✓ e-mail copiado',
         cvTitle: { geral: 'CV - Alexandre Lopes', dev: 'CV - Alexandre Lopes - Dev', dados: 'CV - Alexandre Lopes - Dados' },
         query:
@@ -2663,17 +2656,16 @@ ORDER  BY pct DESC;`,
       },
       en: {
         typed: {
-          geral: ['SaaS in production · Sinc', 'C & data structures', 'SQL & modeling', 'Python & automation', 'Excel & data analysis'],
-          dev:   ['Next.js + TypeScript', 'PostgreSQL & RLS', 'C & data structures', 'SQL & concurrency (ACID)', 'Python & automation'],
-          dados: ['SQL & data modeling', 'finances in SQL · Sinc', 'Excel & spreadsheets', 'Python for analysis', 'data → decisions'],
+          geral: ['SaaS in production · Sinc', 'SQL & data analysis', 'C & data structures', 'Python & data pipelines', 'data → decisions'],
+          dev:   ['Next.js + TypeScript', 'PostgreSQL & RLS', 'C & data structures', 'Python → PostgreSQL pipelines', 'CI with GitHub Actions'],
+          dados: ['analytical SQL · window functions', '2.6M fuel prices · ANP', '100k e-commerce orders', 'Python & statistics', 'data → decisions'],
         },
         live: 'live · api.github.com', ref: 'reference data', loading: 'loading…',
         run: '▶ run', running: 'running…', rows: (n) => `✓ ${n} rows`,
         inRepos: (n) => `in ${n} repositor${n > 1 ? 'ies' : 'y'}`, ofRepo: (r) => `of ${r}'s code`,
         others: 'Other',
-        free: 'free', booked: 'booked · T1', lockAcq: 'lock acquired', waiting: 'waiting for lock…',
-        insert: 'INSERT booking', busy: 'taken → ROLLBACK',
-        words: ['memory', 'pointer', 'hash', 'index', 'file', 'search', 'data', 'list', 'key', 'node'], find: 'search',
+        regions: ['Southeast', 'Northeast', 'South', 'Center-West', 'North'], rulerNote: 'rest of Brazil: ±0.4%',
+        delays: ['on time', '1–3 d', '4–7 d', '8–14 d', '15+ d'], scoreNote: '−2.02★ · p < 0.001',
         copied: '✓ email copied',
         cvTitle: { geral: 'CV - Alexandre Lopes', dev: 'CV - Alexandre Lopes - Dev', dados: 'CV - Alexandre Lopes - Data' },
         query:
@@ -3052,52 +3044,52 @@ ORDER  BY pct DESC;`,
       return { reset() { clearTimeout(timer); timer = null; i = 0; if (on) next(); } };
     };
 
-    /* pessimistic lock */
-    const slot = $('#slot'), slotState = $('#slotState');
-    const txs = $$('#txList li');
-    const setTx = (i, cls, msg) => { txs[i].className = cls; $('.tx-msg', txs[i]).textContent = msg; };
-    const lockRun = runner(() => [
-      [() => { slot.className = 'slot'; slotState.textContent = t('free'); txs.forEach((_, i) => setTx(i, '', 'BEGIN')); }, 1100],
-      [() => { setTx(0, 'st-lock', t('lockAcq')); setTx(1, 'st-wait', t('waiting')); setTx(2, 'st-wait', t('waiting'));
-               slot.className = 'slot locked'; slotState.textContent = '🔒 T1'; }, 1300],
-      [() => setTx(0, 'st-lock', t('insert')), 1100],
-      [() => { setTx(0, 'st-ok', 'COMMIT ✓'); slot.className = 'slot booked'; slotState.textContent = t('booked'); }, 1200],
-      [() => setTx(1, 'st-rb', t('busy')), 700],
-      [() => setTx(2, 'st-rb', t('busy')), 2600],
-    ], slot.closest('.demo'));
+    /* régua: diesel por região (médias ponderadas reais, 2023–2025) */
+    const numFmt = (v, d) => v.toLocaleString(state.lang === 'en' ? 'en-US' : 'pt-BR', { minimumFractionDigits: d, maximumFractionDigits: d });
+    const REGIONS = [5.953, 5.956, 5.958, 5.979, 6.400];   // SE, NE, S, CO, N
+    const OTHERS = 5.9616, X0 = 5.85, X1 = 6.50;
+    const xOf = (p) => ((p - X0) / (X1 - X0) * 100).toFixed(1) + '%';
+    const rulerEl = $('#ruler'), rulerNote = $('#rulerNote');
+    const buildRuler = () => {
+      rulerEl.innerHTML = REGIONS.map((p, i) => `
+        <div class="ruler-row">
+          <span>${t('regions')[i]}</span>
+          <div class="ruler-track">
+            ${i === 4 ? `<i class="ruler-gap" style="--from:${xOf(OTHERS)};--w:calc(${xOf(p)} - ${xOf(OTHERS)})"><b>+${numFmt(7.4, 1)}%</b></i>` : ''}
+            <i class="ruler-dot" style="--x:${xOf(p)}"></i>
+          </div>
+          <span class="ruler-val">${numFmt(p, 2)}</span>
+        </div>`).join('');
+    };
+    buildRuler();
+    const rows = () => $$('.ruler-row', rulerEl);
+    const rulerRun = runner(() => [
+      [() => { rows().forEach(r => r.classList.remove('on', 'hot', 'gap')); rulerNote.textContent = '2023–2025'; rulerNote.classList.remove('alert'); }, 600],
+      ...[0, 1, 2, 3].map(i => [() => rows()[i].classList.add('on'), 420]),
+      [() => rows()[4].classList.add('on', 'hot'), 700],
+      [() => { rows()[4].classList.add('gap'); rulerNote.textContent = t('rulerNote'); rulerNote.classList.add('alert'); }, 3400],
+    ], rulerEl.closest('.demo'));
 
-    /* tabela hash (djb2 de verdade) */
-    const bucketsEl = $('#buckets');
-    const buckets = Array.from({ length: 8 }, (_, i) => {
-      const b = document.createElement('div');
-      b.className = 'bucket'; b.dataset.i = i;
-      bucketsEl.appendChild(b); return b;
-    });
-    const djb2 = (s) => { let h = 5381; for (const ch of s) h = ((h << 5) + h + ch.codePointAt(0)) >>> 0; return h; };
-    const opEl = $('#hashOp'), hEl = $('#hashCalc');
-    const setOp = (fn, w) => opEl.innerHTML = `${fn}(<span class="w">"${w}"</span>)`;
-    const clearBuckets = () => { buckets.forEach(b => { b.classList.remove('hit', 'found'); b.innerHTML = ''; }); setOp('insert', '…'); hEl.textContent = 'djb2 % 8'; };
-    const hashRun = runner(() => [
-      [clearBuckets, 500],
-      ...t('words').map(w => [() => {
-        const k = djb2(w) % 8;
-        setOp('insert', w); hEl.textContent = `djb2 % 8 = ${k}`;
-        buckets.forEach(b => b.classList.remove('hit', 'found'));
-        buckets[k].classList.add('hit');
-        const c = document.createElement('span');
-        c.className = 'chip'; c.textContent = w; c.dataset.w = w;
-        buckets[k].appendChild(c);
-      }, 750]),
-      [() => {
-        const q = t('find'), k = djb2(q) % 8;
-        setOp('find', q); hEl.textContent = `bucket ${k} · O(1)`;
-        buckets.forEach(b => b.classList.remove('hit'));
-        buckets[k].classList.add('found');
-        $$('.chip', buckets[k]).forEach(c => { if (c.dataset.w === q) c.classList.add('found'); });
-      }, 2800],
-    ], bucketsEl.closest('.demo'));
+    /* nota média × atraso (dados reais, Olist) */
+    const SCORES = [4.29, 3.29, 2.10, 1.67, 1.72];
+    const scoreEl = $('#scoreBars'), scoreNote = $('#scoreNote');
+    const buildScores = () => {
+      scoreEl.innerHTML = SCORES.map((v, i) => `
+        <div class="score-col">
+          <span class="v">${numFmt(v, 2)}</span>
+          <i class="bar" style="--h:${(v / 5 * 72).toFixed(1)}%"></i>
+          <span class="lbl">${t('delays')[i]}</span>
+        </div>`).join('');
+    };
+    buildScores();
+    const cols = () => $$('.score-col', scoreEl);
+    const scoreRun = runner(() => [
+      [() => { cols().forEach(c => c.classList.remove('on')); scoreEl.classList.remove('done'); scoreNote.textContent = '★ 1–5'; scoreNote.classList.remove('alert'); }, 600],
+      ...SCORES.map((_, i) => [() => cols()[i].classList.add('on'), i ? 480 : 800]),
+      [() => { scoreEl.classList.add('done'); scoreNote.textContent = t('scoreNote'); scoreNote.classList.add('alert'); }, 3400],
+    ], scoreEl.closest('.demo'));
 
-    onState((langChanged) => { if (langChanged) { clearBuckets(); lockRun.reset(); hashRun.reset(); } });
+    onState((langChanged) => { if (langChanged) { buildRuler(); buildScores(); rulerRun.reset(); scoreRun.reset(); } });
 
     /* ── MARQUEE: velocidade e sentido seguem o scroll ── */
     const mqBox = $('#marqueeBox'), mq = $('#marquee');
@@ -3162,9 +3154,11 @@ ORDER  BY pct DESC;`,
 
     /* ── DADOS DO GITHUB, "consultados" em SQL ── */
     const USER = 'lopsxzale';
-    const COLORS = { C: 'var(--viz-c)', Python: 'var(--viz-py)', HTML: 'var(--viz-html)' };
+    const COLORS = { C: 'var(--viz-c)', Python: 'var(--viz-py)', HTML: 'var(--viz-html)', TypeScript: 'var(--viz-ts)', 'Jupyter Notebook': 'var(--viz-nb)' };
     const colorOf = (l) => COLORS[l] || 'var(--viz-other)';
     const FALLBACK = [
+      { name: 'logistics-distribution-analytics', url: 'https://github.com/lopsxzale/logistics-distribution-analytics', langs: { 'Jupyter Notebook': 346567, TypeScript: 177508, Python: 57029, CSS: 5090, JavaScript: 465 } },
+      { name: 'ecommerce-sales-analytics', url: 'https://github.com/lopsxzale/ecommerce-sales-analytics', langs: { 'Jupyter Notebook': 147001, TypeScript: 133357, Python: 26419, CSS: 4791, JavaScript: 465 } },
       { name: 'Fundamentos', url: 'https://github.com/lopsxzale/Fundamentos', langs: { C: 13926, Python: 5637 } },
       { name: 'Index---LP1', url: 'https://github.com/lopsxzale/Index---LP1', langs: { C: 7180 } },
       { name: 'sistema-barbearia-bd2', url: 'https://github.com/lopsxzale/sistema-barbearia-bd2', langs: { HTML: 6121, Python: 3864 } },

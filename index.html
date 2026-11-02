@@ -1414,6 +1414,27 @@
       .bg-grid::before { animation: none !important; }
     }
 
+    /* ─────────────────────────────────────────────
+       PRÉVIA DOS PROJETOS: a página inteira rolando por transform (na taxa da tela,
+       60, 144 ou 180Hz), no lugar de vídeo a 25 quadros por segundo
+    ───────────────────────────────────────────── */
+    .shot .scroll-shot { position: relative; display: block; flex: 1; min-height: 0; width: 100%; overflow: hidden; background: var(--code-bg); }
+    .shot .scroll-shot img, .featured .shot .scroll-shot img {
+      position: absolute; top: 0; left: 0; width: 100%; height: auto; max-height: none;
+      object-fit: fill; border: 0; border-radius: 0; box-shadow: none; background: none;
+      transform: translate3d(0, 0, 0); will-change: transform;
+      animation: page-scroll var(--dur, 14s) cubic-bezier(.65,0,.35,1) infinite alternate;
+      animation-play-state: paused;
+    }
+    .demo.show-shot .shot .scroll-shot img { animation-play-state: running; }
+    .demo .shot:hover .scroll-shot img { animation-play-state: paused; }
+    @keyframes page-scroll { 0%, 7% { transform: translate3d(0, 0, 0); } 93%, 100% { transform: translate3d(0, var(--end, -60%), 0); } }
+    .featured .shot .scroll-shot {
+      flex: none; aspect-ratio: 16 / 10; max-height: calc(100% - 34px);
+      border: 1px solid #2A2A30; border-radius: 0 0 12px 12px; box-shadow: 0 30px 60px -30px rgba(0,0,0,.8);
+    }
+    @media (prefers-reduced-motion: reduce) { .shot .scroll-shot img { animation: none !important; } }
+
     ::-webkit-scrollbar { width: 10px; }
     ::-webkit-scrollbar-track { background: var(--paper); }
     ::-webkit-scrollbar-thumb { background: var(--line-2); border: 2px solid var(--paper); border-radius: 999px; }
@@ -1908,7 +1929,7 @@
                   <span class="demo-caption" data-i18n="capRls">trecho simplificado do projeto · postgresql</span>
                   <a class="shot" href="https://sincbarber.com.br" target="_blank" rel="noopener noreferrer" tabindex="-1">
                     <span class="bar"><span class="url">sincbarber.com.br</span><span class="go" data-i18n="shotGo">abrir ↗</span></span>
-                    <video src="img/demo-sinc.webm" poster="img/sinc.jpg" muted loop playsinline preload="none" width="960" height="600"></video>
+                    <span class="scroll-shot"><img src="img/full-sinc.jpg" alt="" width="960" height="2100" loading="lazy" decoding="async" /></span>
                   </a>
                 </div>
                 <div class="project-body">
@@ -1972,7 +1993,7 @@
                   <span class="demo-caption" data-i18n="capArm">método · curva de Pareto em sql</span>
                   <a class="shot" href="https://perdas-armazem.vercel.app/pt/" target="_blank" rel="noopener noreferrer" tabindex="-1" data-i18n-attr="href:urlArm">
                     <span class="bar"><span class="url">perdas-armazem.vercel.app</span><span class="go" data-i18n="shotGo">abrir ↗</span></span>
-                    <img src="img/armazem.jpg" alt="" width="600" height="866" loading="lazy" decoding="async" />
+                    <span class="scroll-shot"><img src="img/full-armazem.jpg" alt="" width="960" height="2100" loading="lazy" decoding="async" /></span>
                   </a>
                 </div>
                 <div class="project-body">
@@ -2044,7 +2065,7 @@
                 <span class="demo-caption" data-i18n="capRuler">dados reais · ANP · média ponderada</span>
                 <a class="shot" href="https://combustivel-logistica.vercel.app/pt/" target="_blank" rel="noopener noreferrer" tabindex="-1" data-i18n-attr="href:urlLog">
                   <span class="bar"><span class="url">combustivel-logistica.vercel.app</span><span class="go" data-i18n="shotGo">abrir ↗</span></span>
-                  <video src="img/demo-combustivel.webm" poster="img/combustivel.jpg" muted loop playsinline preload="none" width="960" height="600"></video>
+                  <span class="scroll-shot"><img src="img/full-combustivel.jpg" alt="" width="960" height="2100" loading="lazy" decoding="async" /></span>
                 </a>
               </div>
               <div class="project-body">
@@ -2116,7 +2137,7 @@
                 <span class="demo-caption" data-i18n="capScore">dados reais · 96 mil pedidos · Olist</span>
                 <a class="shot" href="https://vendas-e-commercebr.vercel.app/pt/" target="_blank" rel="noopener noreferrer" tabindex="-1" data-i18n-attr="href:urlEcom">
                   <span class="bar"><span class="url">vendas-e-commercebr.vercel.app</span><span class="go" data-i18n="shotGo">abrir ↗</span></span>
-                  <video src="img/demo-ecommerce.webm" poster="img/ecommerce.jpg" muted loop playsinline preload="none" width="960" height="600"></video>
+                  <span class="scroll-shot"><img src="img/full-ecommerce.jpg" alt="" width="960" height="2100" loading="lazy" decoding="async" /></span>
                 </a>
               </div>
               <div class="project-body">
@@ -3001,13 +3022,29 @@ ORDER  BY pct DESC;`,
     };
 
     /* site no ar: o vídeo só toca enquanto está à mostra (com movimento reduzido, fica o poster) */
-    const showShot = (demo, on) => {
-      demo.classList.toggle('show-shot', on);
-      const v = $('.shot video', demo);
-      if (!v || reduce) return;
-      if (on) { v.currentTime = 0; v.play().catch(() => {}); } else v.pause();
+    // prévia rolando: distância e duração medidas só quando o tamanho muda, nunca por quadro
+    const fitShot = (box) => {
+      const img = $('img', box);
+      const end = box.clientHeight - img.clientHeight;
+      if (!img.clientHeight || end >= 0) return;
+      img.style.setProperty('--end', end + 'px');
+      img.style.setProperty('--dur', Math.min(Math.max(-end / 110, 7), 16).toFixed(1) + 's');
     };
-    const SHOT_MS = 11000;
+    const shotRO = new ResizeObserver(entries => entries.forEach(e => fitShot(e.target)));
+    $$('.scroll-shot').forEach(box => {
+      shotRO.observe(box);
+      $('img', box).addEventListener('load', () => fitShot(box));
+    });
+    const showShot = (demo, on) => {
+      const img = $('.scroll-shot img', demo);
+      if (on && img && !reduce) {  // recomeça do topo a cada exibição
+        img.style.animation = 'none';
+        void img.offsetWidth;
+        img.style.animation = '';
+      }
+      demo.classList.toggle('show-shot', on);
+    };
+    const SHOT_MS = 14000;
 
     const sincDemo = $('#sinc .demo');
     runner(() => [

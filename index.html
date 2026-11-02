@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Alexandre Lopes — Dev & Dados</title>
-  <meta name="description" content="Alexandre Lopes — Ciência da Computação (IFCE, 5º período), Aprendiz de Armazém na Dunas · Revenda Ambev e criador do Sinc, SaaS para barbearias em produção. Projetos de análise de dados publicados (2,6 mi preços de combustível da ANP, 100 mil pedidos de e-commerce) com SQL, PostgreSQL, Python e TypeScript." />
+  <meta name="description" content="Alexandre Lopes — Ciência da Computação (IFCE, 5º período), Aprendiz de Armazém na Dunas · Revenda Ambev e criador do Sinc, SaaS para barbearias em produção. Projetos de análise de dados publicados (2,6 mi preços de combustível da ANP, 100 mil pedidos de e-commerce) e um em andamento sobre perdas no armazém, com SQL, PostgreSQL, Python e TypeScript." />
   <meta name="theme-color" content="#F2EFE8" />
   <link rel="canonical" href="https://lopsxzale.github.io/" />
   <meta property="og:type" content="website" />
@@ -79,7 +79,15 @@
       --viz-nb:     #FF5A1F;
       --viz-other:  #A39E93;
 
-      --shadow:     4px 4px 0 var(--ink);
+      /* sombra em "degrau": base sólida curta + difusa (menos chapada) */
+      --sh-c:       #16161A;
+      --sh-soft:    rgba(22,22,26,.22);
+      --shadow-sm:  0 3px 0 -1px var(--sh-c), 0 8px 18px -10px var(--sh-soft);
+      --shadow:     0 5px 0 -1px var(--sh-c), 0 14px 28px -14px var(--sh-soft);
+      --shadow-lg:  0 8px 0 -2px var(--sh-c), 0 26px 46px -18px var(--sh-soft);
+      --shadow-in:  0 1px 0 0 var(--sh-c);
+      --radius:     12px;
+      --radius-sm:  7px;
       --font-display: 'Archivo Black', 'Arial Black', sans-serif;
       --font-mono:  'IBM Plex Mono', ui-monospace, monospace;
       --font-sans:  'IBM Plex Sans', system-ui, sans-serif;
@@ -95,7 +103,7 @@
         --accent-ink: #FF7A45; --ok: #5FB386; --warn: #E0A82E; --on-accent: #141416;
         --code-bg: #0D0D0F;
         --viz-c: #7C9CD0; --viz-py: #5FB386; --viz-html: #D9729E; --viz-ts: #5BB0E0; --viz-other: #6E6A62;
-        --shadow: 4px 4px 0 #000;
+        --sh-c: #000; --sh-soft: rgba(0,0,0,.55);
         color-scheme: dark;
       }
     }
@@ -105,7 +113,7 @@
       --accent-ink: #FF7A45; --ok: #5FB386; --warn: #E0A82E; --on-accent: #141416;
       --code-bg: #0D0D0F;
       --viz-c: #7C9CD0; --viz-py: #5FB386; --viz-html: #D9729E; --viz-ts: #5BB0E0; --viz-other: #6E6A62;
-      --shadow: 4px 4px 0 #000;
+      --sh-c: #000; --sh-soft: rgba(0,0,0,.55);
       color-scheme: dark;
     }
 
@@ -116,16 +124,20 @@
     html { scroll-behavior: smooth; scroll-padding-top: 84px; }
     body {
       background-color: var(--paper);
-      background-image:
-        linear-gradient(var(--grid) 1px, transparent 1px),
-        linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-      background-size: 24px 24px;
       color: var(--ink);
       font-family: var(--font-sans);
       font-size: 16px;
       line-height: 1.65;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
+    }
+    .bg-grid {
+      position: fixed; inset: -24px 0; z-index: -1; pointer-events: none;
+      background-image:
+        linear-gradient(var(--grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+      background-size: 24px 24px;
+      will-change: transform;
     }
     body.menu-open { overflow: hidden; }
     a { color: inherit; text-decoration: none; }
@@ -147,6 +159,8 @@
     @keyframes ping    { 0% { transform: scale(1); opacity: .8; } 100% { transform: scale(2.6); opacity: 0; } }
     @keyframes tape    { to { background-position: 28px 0; } }
     @keyframes flash   { 0%, 100% { outline-color: transparent; } 20%, 60% { outline-color: var(--accent); } }
+    @keyframes float   { 50% { translate: 0 -10px; } }
+    @keyframes sq-blink { 0%, 55% { opacity: 1; } 56%, 100% { opacity: .15; } }
     @keyframes stamp-in { 0% { opacity: 0; transform: rotate(var(--r, -8deg)) scale(1.6); } 70% { opacity: 1; transform: rotate(var(--r, -8deg)) scale(.96); } 100% { opacity: 1; transform: rotate(var(--r, -8deg)) scale(1); } }
 
     /* ─────────────────────────────────────────────
@@ -157,8 +171,11 @@
       border: 1.5px solid var(--ink);
       padding: 28px;
       position: relative;
-      transition: box-shadow var(--transition), transform var(--transition);
+      border-radius: var(--radius);
+      transition: box-shadow .35s var(--ease), transform .35s var(--ease);
     }
+    .card > .label-head:first-child { border-radius: calc(var(--radius) - 1.5px) calc(var(--radius) - 1.5px) 0 0; }
+    .project-card, .skill-card, .about-text, .data-panel { overflow: clip; }
 
     .stamp {
       --c: var(--ok);
@@ -173,6 +190,7 @@
       letter-spacing: .06em;
       text-transform: uppercase;
       line-height: 1.25;
+      border-radius: 5px;
       transform: rotate(var(--r));
       filter: url(#rough);
       opacity: 0;
@@ -255,7 +273,7 @@
     }
     .section-sub { color: var(--ink-2); max-width: 600px; margin: -24px 0 40px; }
 
-    .reveal { opacity: 0; transform: translateY(18px); transition: opacity .6s var(--ease) var(--d, 0s), transform .6s var(--ease) var(--d, 0s); }
+    .reveal { opacity: 0; transform: translateY(32px) scale(.97) rotate(-.6deg); transform-origin: 0 100%; transition: opacity .7s var(--ease) var(--d, 0s), transform .9s var(--ease) var(--d, 0s); }
     .reveal.visible { opacity: 1; transform: none; }
     .section-title.reveal { opacity: 1; transform: none; }
     .section-title .w { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: .08em; margin-bottom: -.08em; }
@@ -290,34 +308,36 @@
       background: var(--ink); color: var(--paper);
       font-family: var(--font-display); font-size: .95rem;
       outline: 2px solid var(--accent); outline-offset: -6px;
+      border-radius: var(--radius-sm);
       position: relative; z-index: 102;
+      transition: transform .4s var(--ease);
     }
     .nav-links {
       display: flex; gap: 2px; list-style: none; position: relative;
-      padding: 3px; border: 1.5px solid var(--ink); background: var(--card);
+      padding: 3px; border: 1.5px solid var(--ink); background: var(--card); border-radius: 999px;
     }
     .nav-links a {
       display: block; position: relative; z-index: 1;
       font-family: var(--font-mono); font-size: .76rem; font-weight: 500;
-      color: var(--ink-2); padding: 5px 12px;
+      color: var(--ink-2); padding: 5px 13px; border-radius: 999px;
       transition: color var(--transition);
     }
     .nav-links a:hover { color: var(--ink); }
     .nav-links a.active { color: var(--paper); }
     .nav-pill {
       position: absolute; top: 3px; bottom: 3px; left: 0; width: 0;
-      background: var(--ink);
+      background: var(--ink); border-radius: 999px;
       transition: transform .4s var(--ease), width .4s var(--ease), opacity .3s;
       opacity: 0;
     }
     [data-s="sobre"] { order: 1; } [data-s="dados"] { order: 2; } [data-s="skills"] { order: 3; }
-    [data-s="projetos"] { order: 4; } [data-s="log"] { order: 8; } [data-s="contato"] { order: 9; }
+    [data-s="projetos"] { order: 4; } [data-s="contato"] { order: 9; }
     body[data-foco="dev"] [data-s="projetos"] { order: 2; }
     body[data-foco="dev"] [data-s="skills"]   { order: 3; }
     body[data-foco="dev"] [data-s="dados"]    { order: 4; }
 
     .nav-right { display: flex; align-items: center; gap: 8px; position: relative; z-index: 102; }
-    .lang { display: inline-flex; border: 1.5px solid var(--ink); font-family: var(--font-mono); font-size: .72rem; font-weight: 600; background: var(--card); }
+    .lang { display: inline-flex; border: 1.5px solid var(--ink); font-family: var(--font-mono); font-size: .72rem; font-weight: 600; background: var(--card); border-radius: 999px; overflow: clip; }
     .lang button { padding: 6px 10px; color: var(--ink-3); transition: color .2s, background .2s; }
     .lang button:hover { color: var(--ink); }
     .lang button[aria-pressed="true"] { color: var(--paper); background: var(--ink); }
@@ -326,20 +346,32 @@
       height: 34px; min-width: 34px; padding: 0 10px;
       border: 1.5px solid var(--ink); background: var(--card);
       font-family: var(--font-mono); font-size: .76rem; font-weight: 500; color: var(--ink);
+      border-radius: var(--radius-sm);
       transition: box-shadow var(--transition), transform var(--transition);
     }
     .icon-btn svg, .nav-cta svg { width: 15px; height: 15px; }
-    .icon-btn:hover, .nav-cta:hover { box-shadow: 3px 3px 0 var(--ink); transform: translate(-1px, -1px); }
-    .theme-btn .moon { display: none; }
-    :root[data-theme="dark"] .theme-btn .sun { display: none; }
-    :root[data-theme="dark"] .theme-btn .moon { display: block; }
+    .icon-btn:hover, .nav-cta:hover { box-shadow: var(--shadow-sm); transform: translateY(-2px); }
+    /* sol ↔ lua: um gira para fora enquanto o outro entra */
+    .theme-btn { position: relative; width: 34px; overflow: hidden; }
+    .theme-btn svg { position: absolute; inset: 0; margin: auto; transition: transform .6s cubic-bezier(.34,1.56,.64,1), opacity .3s ease; }
+    .theme-btn .moon { opacity: 0; transform: rotate(-120deg) scale(.3) translateY(10px); }
+    :root[data-theme="dark"] .theme-btn .sun { opacity: 0; transform: rotate(120deg) scale(.3) translateY(10px); }
+    :root[data-theme="dark"] .theme-btn .moon { opacity: 1; transform: none; }
     @media (prefers-color-scheme: dark) {
-      :root:not([data-theme="light"]) .theme-btn .sun { display: none; }
-      :root:not([data-theme="light"]) .theme-btn .moon { display: block; }
+      :root:not([data-theme="light"]) .theme-btn .sun { opacity: 0; transform: rotate(120deg) scale(.3) translateY(10px); }
+      :root:not([data-theme="light"]) .theme-btn .moon { opacity: 1; transform: none; }
     }
 
-    .burger { display: none; width: 40px; height: 40px; position: relative; border: 1.5px solid var(--ink); background: var(--card); }
-    .burger span { position: absolute; left: 10px; right: 10px; height: 2px; background: var(--ink); transition: transform .35s var(--ease), opacity .25s, top .35s var(--ease); }
+    /* troca de tema: círculo que se abre a partir do botão (o JS anima o clip-path) */
+    html.theme-vt::view-transition-old(root), html.theme-vt::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+    html.theme-vt::view-transition-new(root) { z-index: 2; }
+    /* sem View Transitions: cores escorrem em vez de trocar de uma vez */
+    html.theme-anim, html.theme-anim *, html.theme-anim *::before, html.theme-anim *::after {
+      transition: background-color .5s ease, color .5s ease, border-color .5s ease, fill .5s ease, box-shadow .5s ease !important;
+    }
+
+    .burger { display: none; width: 40px; height: 40px; position: relative; border: 1.5px solid var(--ink); background: var(--card); border-radius: var(--radius-sm); }
+    .burger span { position: absolute; left: 10px; right: 10px; height: 2px; border-radius: 2px; background: var(--ink); transition: transform .35s var(--ease), opacity .25s, top .35s var(--ease); }
     .burger span:nth-child(1) { top: 12px; } .burger span:nth-child(2) { top: 18px; } .burger span:nth-child(3) { top: 24px; }
     .menu-open .burger span:nth-child(1) { top: 18px; transform: rotate(45deg); }
     .menu-open .burger span:nth-child(2) { opacity: 0; }
@@ -369,17 +401,17 @@
        CHAVE DE FOCO (Geral · Dev · Dados)
     ───────────────────────────────────────────── */
     .foco { display: inline-flex; align-items: center; gap: 12px; margin-bottom: 26px; font-family: var(--font-mono); font-size: .72rem; color: var(--ink-3); flex-wrap: wrap; text-transform: uppercase; letter-spacing: .12em; }
-    .seg-switch { position: relative; display: inline-flex; padding: 3px; border: 1.5px solid var(--ink); background: var(--card); }
+    .seg-switch { position: relative; display: inline-flex; padding: 3px; border: 1.5px solid var(--ink); background: var(--card); border-radius: 999px; }
     .seg-switch button {
       position: relative; z-index: 1;
-      padding: 5px 14px;
+      padding: 5px 14px; border-radius: 999px;
       font-family: var(--font-mono); font-size: .76rem; font-weight: 500; letter-spacing: 0; text-transform: none;
       color: var(--ink-2);
       transition: color .3s var(--ease);
     }
     .seg-switch button:hover { color: var(--ink); }
     .seg-switch button[aria-pressed="true"] { color: var(--on-accent); font-weight: 600; }
-    .seg-pill { position: absolute; top: 3px; bottom: 3px; left: 0; width: 0; background: var(--accent); transition: transform .45s var(--ease), width .45s var(--ease); }
+    .seg-pill { position: absolute; top: 3px; bottom: 3px; left: 0; width: 0; background: var(--accent); border-radius: 999px; transition: transform .5s cubic-bezier(.34,1.56,.64,1), width .5s cubic-bezier(.34,1.56,.64,1); }
 
     /* ─────────────────────────────────────────────
        HERO
@@ -407,7 +439,8 @@
       margin-bottom: 22px;
     }
     .hero-text h1 .last { display: inline-block; position: relative; }
-    .hero-text h1 .last::after { content: ''; display: inline-block; width: .32em; height: .32em; margin-left: .12em; background: var(--accent); vertical-align: baseline; }
+    .hero-text h1 .last::after { content: ''; display: inline-block; width: .32em; height: .32em; margin-left: .12em; background: var(--accent); border-radius: .06em; vertical-align: baseline; animation: sq-blink 1.1s steps(1) infinite; }
+    .hero-text { translate: 0 calc(var(--hp, 0) * 50px); opacity: calc(1 - var(--hp, 0) * .7); }
 
     .ticker {
       display: flex; align-items: center; gap: 10px;
@@ -419,45 +452,45 @@
     .ticker .typed { color: var(--ink); transition: opacity .3s ease, transform .3s ease; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .ticker .typed.out { opacity: 0; transform: translateY(-6px); }
 
-    .hero-text .title { font-family: var(--font-mono); font-size: clamp(.8rem, 2vw, .92rem); color: var(--ink-2); margin-bottom: 14px; max-width: 620px; }
-    .hero-text .title .accent { color: var(--accent-ink); font-weight: 600; }
-    .hero-text .title .em { color: var(--ink); font-weight: 500; }
+    .hero-text .role { font-family: var(--font-mono); font-size: clamp(.8rem, 2vw, .92rem); color: var(--ink-2); margin-bottom: 30px; }
+    .hero-text .role .sep { color: var(--accent-ink); font-weight: 600; margin: 0 .35em; }
 
     .ship-chip {
       display: inline-flex; align-items: center; gap: 10px;
-      margin-bottom: 18px; padding: 5px 12px;
-      border: 1.5px solid var(--ok);
+      padding: 7px 14px;
+      border: 1.5px solid var(--ok); border-radius: 999px; background: var(--card);
       font-family: var(--font-mono); font-size: .76rem; color: var(--ink-2);
       transition: box-shadow var(--transition), transform var(--transition);
     }
     .ship-chip b { color: var(--ok); font-weight: 600; }
     .ship-chip svg { width: 14px; height: 14px; color: var(--ok); }
-    .ship-chip:hover { box-shadow: 3px 3px 0 var(--ok); transform: translate(-1px, -1px); }
+    .ship-chip:hover { box-shadow: 0 6px 18px -8px var(--ok); transform: translateY(-2px); }
 
-    .hero-text .bio { font-size: 1.03rem; color: var(--ink-2); max-width: 560px; margin-bottom: 26px; }
+    .about-lead { font-size: 1.14rem !important; line-height: 1.55; color: var(--ink) !important; font-weight: 500; padding-bottom: 14px; border-bottom: 1px dashed var(--line); }
     body[data-foco="dados"] .bio .v-base { display: none; }
     body:not([data-foco="dados"]) .bio .v-dados { display: none; }
 
     /* números que dá para conferir — cada um leva à prova */
-    .facts { display: grid; grid-template-columns: repeat(4, 1fr); border: 1.5px solid var(--ink); background: var(--card); margin-bottom: 30px; max-width: 620px; }
-    .facts a { padding: 10px 12px; border-left: 1.5px solid var(--ink); display: flex; flex-direction: column; gap: 2px; transition: background var(--transition); }
+    .proof { position: relative; z-index: 1; max-width: 1120px; margin: -36px auto 48px; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; gap: 20px 28px; flex-wrap: wrap; }
+    .facts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); flex: 1 1 520px; max-width: 640px; border: 1.5px solid var(--ink); background: var(--card); border-radius: var(--radius); overflow: clip; box-shadow: var(--shadow); }
+    .facts a { padding: 12px 14px; border-left: 1.5px solid var(--ink); display: flex; flex-direction: column; gap: 2px; transition: background var(--transition); }
     .facts a:first-child { border-left: 0; }
     .facts a:hover { background: var(--paper-2); }
-    .facts b { font-family: var(--font-display); font-weight: 400; font-size: 1.35rem; line-height: 1.1; }
-    .facts span { font-family: var(--font-mono); font-size: .68rem; color: var(--ink-2); line-height: 1.35; }
+    .facts b { font-family: var(--font-display); font-weight: 400; font-size: 1.5rem; line-height: 1.1; font-variant-numeric: tabular-nums; }
+    .facts a > span { font-family: var(--font-mono); font-size: .68rem; color: var(--ink-2); line-height: 1.35; }
 
     .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
     .btn {
       display: inline-flex; align-items: center; gap: 9px;
       padding: 12px 22px;
       font-family: var(--font-mono); font-size: .84rem; font-weight: 600;
-      border: 1.5px solid var(--ink);
+      border: 1.5px solid var(--ink); border-radius: var(--radius-sm);
       box-shadow: var(--shadow);
-      transition: transform .15s var(--ease), box-shadow .15s var(--ease), background var(--transition);
+      transition: transform .25s var(--ease), box-shadow .25s var(--ease), background var(--transition);
     }
     .btn svg { width: 16px; height: 16px; flex-shrink: 0; }
-    .btn:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ink); }
-    .btn:active { transform: translate(3px, 3px); box-shadow: 1px 1px 0 var(--ink); }
+    .btn:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+    .btn:active { transform: translateY(3px); box-shadow: var(--shadow-in); transition-duration: .08s; }
     .btn-primary { background: var(--accent); color: var(--on-accent); }
     .btn-secondary { background: var(--card); color: var(--ink); }
 
@@ -468,7 +501,11 @@
     .hero-social .loc { color: var(--ink-3); gap: 6px; display: inline-flex; align-items: center; }
 
     /* etiqueta de remetente com a foto */
-    .ship-label { position: relative; background: var(--card); border: 1.5px solid var(--ink); box-shadow: 8px 8px 0 var(--ink); }
+    .ship-label { position: relative; background: var(--card); border: 1.5px solid var(--ink); border-radius: var(--radius); box-shadow: var(--shadow-lg); }
+    .ship-label > .label-head { border-radius: calc(var(--radius) - 1.5px) calc(var(--radius) - 1.5px) 0 0; }
+    .hero-avatar { perspective: 1000px; translate: 0 calc(var(--hp, 0) * -70px); }
+    [data-tilt] { transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(var(--lift, 0px)); }
+    .ship-label { animation: float 6s ease-in-out 1.2s infinite; transition: transform .5s var(--ease); }
     .ship-label .photo { position: relative; border-bottom: 1.5px solid var(--ink); aspect-ratio: 1; overflow: hidden; background: var(--paper-2); }
     .ship-label .photo img { width: 100%; height: 100%; object-fit: cover; user-select: none; -webkit-user-select: none; }
     .ship-label dl { display: grid; grid-template-columns: auto 1fr; font-family: var(--font-mono); font-size: .72rem; }
@@ -507,7 +544,7 @@
     .now-card { grid-column: span 6; display: flex; align-items: center; gap: 18px; flex-wrap: wrap; padding: 16px 22px; }
     .now-card .now-label { font-family: var(--font-mono); font-size: .72rem; font-weight: 600; letter-spacing: .15em; text-transform: uppercase; color: var(--ok); display: inline-flex; align-items: center; gap: 10px; }
     .now-card .now-text { font-weight: 600; }
-    .now-card .now-bar { flex: 1; min-width: 140px; height: 10px; border: 1.5px solid var(--ink); background: repeating-linear-gradient(-45deg, var(--accent) 0 7px, transparent 7px 14px); background-size: 28px 100%; animation: tape 1.2s linear infinite; }
+    .now-card .now-bar { flex: 1; min-width: 140px; height: 10px; border: 1.5px solid var(--ink); border-radius: 999px; background: repeating-linear-gradient(-45deg, var(--accent) 0 7px, transparent 7px 14px); background-size: 28px 100%; animation: tape 1.2s linear infinite; }
 
     .sub-label { font-family: var(--font-mono); font-size: .72rem; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--ink-2); margin: 64px 0 28px; display: flex; align-items: center; gap: 12px; }
     .sub-label::after { content: ''; flex: 1; height: 1.5px; background: var(--ink); }
@@ -537,13 +574,13 @@
     .data-panel .inner { padding: 28px; }
     .data-head { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 22px; }
     .data-head h3 { font-family: var(--font-mono); font-size: 1rem; font-weight: 600; }
-    .data-status { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: .7rem; color: var(--ink-2); padding: 4px 10px; border: 1.5px solid var(--ink); }
+    .data-status { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: .7rem; color: var(--ink-2); padding: 4px 12px; border: 1.5px solid var(--ink); border-radius: 999px; }
     .data-status .dot-live, .data-status .dot-live::after { background: var(--warn); }
     .data-status.live .dot-live, .data-status.live .dot-live::after { background: var(--ok); }
 
-    .sql-box { border: 1.5px solid var(--ink); background: var(--code-bg); margin-bottom: 26px; overflow: hidden; }
+    .sql-box { border: 1.5px solid var(--ink); background: var(--code-bg); margin-bottom: 26px; overflow: hidden; border-radius: var(--radius-sm); }
     .sql-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 7px 8px 7px 14px; border-bottom: 1px solid #2c2c31; font-family: var(--font-mono); font-size: .7rem; color: var(--code-dim); }
-    .run-btn { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: .72rem; font-weight: 600; padding: 4px 12px; color: var(--on-accent); background: var(--accent); white-space: nowrap; transition: filter .2s; }
+    .run-btn { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: .72rem; font-weight: 600; padding: 4px 12px; color: var(--on-accent); background: var(--accent); white-space: nowrap; border-radius: 4px; transition: filter .2s; }
     .run-btn:hover { filter: brightness(1.08); }
     .run-btn.running { background: #E0A82E; }
     .run-btn.running::before { content: ''; width: 9px; height: 9px; border-radius: 50%; border: 2px solid currentColor; border-right-color: transparent; animation: spin .7s linear infinite; }
@@ -553,7 +590,7 @@
 
     .data-results { opacity: .2; transform: translateY(10px); transition: opacity .6s var(--ease), transform .6s var(--ease); }
     .ran .data-results { opacity: 1; transform: none; }
-    .kpis { display: grid; grid-template-columns: repeat(3, 1fr); border: 1.5px solid var(--ink); margin-bottom: 26px; }
+    .kpis { display: grid; grid-template-columns: repeat(3, 1fr); border: 1.5px solid var(--ink); margin-bottom: 26px; border-radius: var(--radius-sm); overflow: clip; }
     .kpi { padding: 12px 16px; border-left: 1.5px solid var(--ink); }
     .kpi:first-child { border-left: 0; }
     .kpi b { display: block; font-family: var(--font-display); font-weight: 400; font-size: clamp(1.3rem, 4vw, 1.9rem); line-height: 1.15; }
@@ -562,18 +599,18 @@
     .tabs { position: relative; display: flex; gap: 4px; border-bottom: 1.5px solid var(--ink); margin-bottom: 22px; }
     .tabs button { font-family: var(--font-mono); font-size: .76rem; font-weight: 500; padding: 8px 12px; color: var(--ink-3); transition: color .2s; }
     .tabs button:hover, .tabs button[aria-selected="true"] { color: var(--ink); }
-    .tab-ink { position: absolute; bottom: -1.5px; left: 0; height: 4px; width: 0; background: var(--accent); transition: transform .4s var(--ease), width .4s var(--ease); }
+    .tab-ink { position: absolute; bottom: -1.5px; left: 0; height: 4px; width: 0; background: var(--accent); border-radius: 4px 4px 0 0; transition: transform .4s var(--ease), width .4s var(--ease); }
     .tab-panel.tab-in { animation: tabIn .45s var(--ease) both; }
 
     .viz-title { font-family: var(--font-mono); font-size: .7rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 12px; }
-    .stack-bar { display: flex; gap: 2px; height: 18px; overflow: hidden; background: var(--paper-2); border: 1.5px solid var(--ink); margin-bottom: 16px; }
+    .stack-bar { display: flex; gap: 2px; height: 18px; overflow: hidden; background: var(--paper-2); border: 1.5px solid var(--ink); margin-bottom: 16px; border-radius: 999px; }
     .stack-bar.small { height: 10px; margin: 0; border-width: 1px; }
     .seg { height: 100%; width: 0; transition: width 1.1s var(--ease), opacity .2s; position: relative; }
     .stack-bar:hover .seg { opacity: .5; }
     .stack-bar .seg:hover, .stack-bar .seg.tapped { opacity: 1; }
     .legend { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-bottom: 30px; font-family: var(--font-mono); font-size: .78rem; }
     .legend span { display: inline-flex; align-items: center; gap: 8px; }
-    .legend i { width: 10px; height: 10px; }
+    .legend i { width: 10px; height: 10px; border-radius: 3px; }
     .legend em { font-style: normal; color: var(--ink-2); }
     .repo-rows { display: grid; gap: 12px; }
     .repo-row { display: grid; grid-template-columns: minmax(130px, 240px) 1fr 84px; gap: 16px; align-items: center; font-family: var(--font-mono); font-size: .76rem; }
@@ -588,7 +625,7 @@
     .data-table tbody tr:hover { background: var(--paper-2); }
     .data-table i { display: inline-block; width: 9px; height: 9px; margin-right: 10px; }
     .data-note { margin-top: 22px; font-family: var(--font-mono); font-size: .68rem; color: var(--ink-3); }
-    .viz-tip { position: fixed; top: 0; left: 0; z-index: 300; pointer-events: none; background: var(--card); border: 1.5px solid var(--ink); box-shadow: 3px 3px 0 var(--ink); padding: 7px 11px; font-family: var(--font-mono); font-size: .74rem; opacity: 0; transition: opacity .15s; white-space: nowrap; }
+    .viz-tip { position: fixed; top: 0; left: 0; z-index: 300; pointer-events: none; background: var(--card); border: 1.5px solid var(--ink); border-radius: var(--radius-sm); box-shadow: var(--shadow-sm); padding: 7px 11px; font-family: var(--font-mono); font-size: .74rem; opacity: 0; transition: opacity .15s; white-space: nowrap; }
     .viz-tip.on { opacity: 1; }
     .viz-tip i { display: inline-block; width: 8px; height: 8px; margin-right: 6px; }
     .viz-tip small { color: var(--ink-2); font-size: .68rem; }
@@ -608,14 +645,14 @@
       display: inline-flex; align-items: center; gap: 6px;
       font-family: var(--font-mono); font-size: .79rem; font-weight: 500;
       padding: 5px 12px;
-      border: 1.5px solid var(--ink); background: var(--card); color: var(--ink);
+      border: 1.5px solid var(--ink); background: var(--card); color: var(--ink); border-radius: 999px;
       opacity: 0; transform: translateY(8px);
       transition: opacity .45s var(--ease), transform .45s var(--ease), box-shadow .15s var(--ease), background .2s;
     }
     a.tag::after { content: '↘'; font-size: .72rem; color: var(--accent-ink); }
     a.tag[href^="http"]::after { content: '↗'; }
     .visible .tag { opacity: 1; transform: none; }
-    .visible a.tag:hover { transform: translate(-2px, -2px); box-shadow: 3px 3px 0 var(--ink); }
+    .visible a.tag:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
     span.tag { border-style: dashed; color: var(--ink-2); }
     body[data-foco="dev"]   .visible .tag:not([data-f~="dev"]),
     body[data-foco="dados"] .visible .tag:not([data-f~="dados"]) { opacity: .3; }
@@ -631,10 +668,11 @@
     ───────────────────────────────────────────── */
     .projects-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; margin-bottom: 56px; }
     .project-card { height: 100%; display: flex; flex-direction: column; padding: 0; --accent-c: var(--accent-ink); }
-    .project-card:hover { box-shadow: 8px 8px 0 var(--ink); transform: translate(-3px, -3px); }
+    .project-card[data-tilt] { transform: perspective(1400px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(var(--lift, 0px)); }
+    .project-card:hover { box-shadow: var(--shadow-lg); --lift: -6px; }
     .projects-grid > .featured { grid-column: 1 / -1; }
     .featured .project-card .cols { display: flex; flex: 1; }
-    .featured .demo { flex: 0 0 42%; height: auto; min-height: 280px; border-bottom: 0; border-right: 1.5px solid var(--ink); }
+    .featured .demo { flex: 0 0 42%; height: auto; min-height: 280px; border-bottom: 0; border-right: 1.5px solid var(--ink); border-bottom-left-radius: calc(var(--radius) - 1.5px); }
     .project-card .barcode { width: 96px; height: 22px; color: var(--paper); }
     .project-body > .stamp { right: 22px; top: 22px; }
 
@@ -658,8 +696,10 @@
 
     /* Sinc: trecho de SQL em "papel carbono" */
     .featured .demo { background: var(--code-bg); color: var(--code-fg); }
-    .live-pill { display: inline-flex; align-items: center; gap: 8px; padding: 3px 10px; border: 1.5px solid var(--ok); color: #8FD1AC; font-size: .68rem; }
+    .live-pill { display: inline-flex; align-items: center; gap: 8px; padding: 3px 12px; border: 1.5px solid var(--ok); border-radius: 999px; color: #8FD1AC; font-size: .68rem; }
     .live-pill .dot-live, .live-pill .dot-live::after { background: #5FB386; }
+    .wip-pill { border-color: #E0A82E; color: #F0C766; }
+    .wip-pill .dot-live, .wip-pill .dot-live::after { background: #E0A82E; }
     .policy { margin-top: 16px; font: inherit; color: #BDB7AB; line-height: 1.7; white-space: pre; overflow: hidden; }
     .policy .k { color: var(--code-k); } .policy .f { color: var(--code-f); } .policy .c { color: var(--code-dim); }
     .featured .demo-caption { color: var(--code-dim); }
@@ -685,7 +725,7 @@
     .score-bars { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; height: 116px; border-bottom: 1.5px solid var(--ink); }
     .score-col { display: flex; flex-direction: column; justify-content: flex-end; min-width: 0; gap: 5px; }
     .score-col .v { text-align: center; color: var(--ink); font-weight: 600; font-size: .68rem; opacity: 0; transition: opacity .3s ease .25s; }
-    .score-col .bar { height: var(--h); background: var(--accent); border: 1.5px solid var(--ink); border-bottom: 0; transform: scaleY(0); transform-origin: bottom; transition: transform .55s var(--ease); }
+    .score-col .bar { height: var(--h); background: var(--accent); border: 1.5px solid var(--ink); border-bottom: 0; border-radius: 5px 5px 0 0; transform: scaleY(0); transform-origin: bottom; transition: transform .55s var(--ease); }
     .score-col:first-child .bar { background: var(--ok); }
     .score-col.on .bar { transform: scaleY(1); }
     .score-col.on .v { opacity: 1; }
@@ -703,15 +743,28 @@
     }
     .show-shot .shot { opacity: 1; visibility: visible; transition: opacity .5s ease; }
     .shot .bar { display: flex; align-items: center; gap: 8px; padding: 6px 10px; border-bottom: 1.5px solid var(--ink); background: var(--card); font-size: .64rem; color: var(--ink-2); }
-    .shot .bar .url { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 2px 8px; border: 1px solid var(--line); background: var(--paper); }
+    .shot .bar .url { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 2px 10px; border: 1px solid var(--line); background: var(--paper); border-radius: 999px; }
     .shot .bar .go { color: var(--accent-ink); font-weight: 600; white-space: nowrap; }
-    .shot img { flex: 1; min-height: 0; width: 100%; object-fit: cover; object-position: top center; }
+    .shot img, .shot video { flex: 1; min-height: 0; width: 100%; object-fit: cover; object-position: top center; background: var(--paper-2); }
+    .featured .shot video { object-position: left top; }
     .shot:hover .go { text-decoration: underline; }
 
     .project-body { position: relative; z-index: 1; padding: 24px 26px 26px; display: flex; flex-direction: column; flex: 1; }
-    .project-icon { width: 40px; height: 40px; display: grid; place-items: center; border: 1.5px solid var(--ink); background: var(--paper-2); margin-bottom: 14px; }
+    .project-icon { width: 40px; height: 40px; display: grid; place-items: center; border: 1.5px solid var(--ink); background: var(--paper-2); margin-bottom: 14px; border-radius: var(--radius-sm); }
     .project-icon svg { width: 21px; height: 21px; }
     .project-card h3 { font-family: var(--font-display); font-weight: 400; font-size: 1.32rem; line-height: 1.15; text-transform: uppercase; margin-bottom: 14px; }
+
+    /* impacto em números: só o que já está publicado e dá para conferir */
+    .impact { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1.5px solid var(--ink); border-radius: var(--radius-sm); overflow: clip; background: var(--paper); margin-bottom: 18px; }
+    .impact > div { padding: 10px 12px; border-left: 1.5px solid var(--ink); min-width: 0; }
+    .impact > div:first-child { border-left: 0; }
+    .impact b { display: block; font-family: var(--font-display); font-weight: 400; font-size: 1.4rem; line-height: 1.1; color: var(--accent-ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .impact b.sm { font-size: 1.05rem; padding: 3px 0 2px; }
+    .impact > div > span { display: block; margin-top: 3px; font-family: var(--font-mono); font-size: .64rem; line-height: 1.35; letter-spacing: .04em; text-transform: uppercase; color: var(--ink-2); }
+    .roadmap { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; margin-bottom: 18px; font-family: var(--font-mono); font-size: .7rem; }
+    .roadmap li { padding: 3px 10px; border: 1.5px dashed var(--ink-3); border-radius: 999px; color: var(--ink-2); }
+    .roadmap li.now { border: 1.5px solid var(--warn); color: var(--ink); font-weight: 600; }
+    .roadmap li.now::before { content: '●'; color: var(--warn); margin-right: 6px; }
 
     /* formato "case": pergunta → como fiz → resultado */
     .case { display: grid; grid-template-columns: 96px 1fr; border-top: 1.5px solid var(--ink); margin-bottom: 18px; }
@@ -722,19 +775,19 @@
 
     .why { display: grid; grid-template-rows: 0fr; opacity: 0; margin: 0; transition: grid-template-rows .5s var(--ease), opacity .4s ease, margin .5s var(--ease); }
     .why > div { overflow: hidden; min-height: 0; }
-    .why p { margin: 0; font-family: var(--font-mono); font-size: .74rem; line-height: 1.6; padding: 8px 12px; border-left: 4px solid var(--accent); background: var(--paper-2); }
+    .why p { margin: 0; font-family: var(--font-mono); font-size: .74rem; line-height: 1.6; padding: 8px 12px; border-left: 4px solid var(--accent); background: var(--paper-2); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
     .why b { color: var(--accent-ink); font-weight: 600; margin-right: 6px; }
     .why [data-for] { display: none; }
     body[data-foco="dev"] .why, body[data-foco="dados"] .why { grid-template-rows: 1fr; opacity: 1; margin: 0 0 18px; }
     body[data-foco="dev"] .why [data-for="dev"], body[data-foco="dados"] .why [data-for="dados"] { display: inline; }
 
     .badges { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
-    .badge { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: .68rem; font-weight: 600; padding: 2px 8px; border: 1.5px solid var(--ok); color: var(--ok); transition: background .2s, color .2s; }
+    .badge { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: .68rem; font-weight: 600; padding: 2px 10px; border: 1.5px solid var(--ok); color: var(--ok); border-radius: 999px; transition: background .2s, color .2s; }
     .badge::before { content: '✓'; }
     .badge:hover { background: var(--ok); color: var(--card); }
 
     .project-tools { display: flex; flex-wrap: wrap; gap: 6px; }
-    .tool-chip { font-family: var(--font-mono); font-size: .7rem; padding: 2px 8px; border: 1px solid var(--line); color: var(--ink-2); background: var(--paper); }
+    .tool-chip { font-family: var(--font-mono); font-size: .7rem; padding: 2px 10px; border: 1px solid var(--line); color: var(--ink-2); background: var(--paper); border-radius: 999px; }
 
     .repo-links { margin-top: auto; padding-top: 22px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 22px; }
 
@@ -743,16 +796,17 @@
       display: inline-flex; align-items: stretch;
       border: 1.5px solid var(--ink); background: var(--accent); color: var(--on-accent);
       font-family: var(--font-mono); font-size: .84rem; font-weight: 600;
+      border-radius: var(--radius-sm); overflow: clip;
       box-shadow: var(--shadow);
-      transition: transform .15s var(--ease), box-shadow .15s var(--ease);
+      transition: transform .25s var(--ease), box-shadow .25s var(--ease);
     }
     .live-btn .tape { width: 30px; border-right: 1.5px solid var(--ink); background: repeating-linear-gradient(-45deg, var(--ink) 0 7px, var(--accent) 7px 14px); background-size: 28px 100%; animation: tape 1s linear infinite; }
     .live-btn .txt { display: inline-flex; align-items: center; gap: 9px; padding: 10px 16px; }
     .live-btn .dot-live, .live-btn .dot-live::after { background: var(--on-accent); }
     .live-btn svg { width: 15px; height: 15px; transition: transform .2s var(--ease); }
-    .live-btn:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ink); }
+    .live-btn:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
     .live-btn:hover svg { transform: translate(2px, -2px); }
-    .live-btn:active { transform: translate(3px, 3px); box-shadow: 1px 1px 0 var(--ink); }
+    .live-btn:active { transform: translateY(3px); box-shadow: var(--shadow-in); transition-duration: .08s; }
 
     .repo-link { display: inline-flex; align-items: center; gap: 7px; font-family: var(--font-mono); font-size: .8rem; font-weight: 600; color: var(--ink-2); border-bottom: 1.5px solid var(--line); padding-bottom: 1px; transition: color .2s, border-color .2s; }
     .repo-link:hover { color: var(--ink); border-color: var(--ink); }
@@ -764,29 +818,11 @@
     .mini-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; }
     .mini-card { height: 100%; padding: 22px; display: flex; gap: 16px; align-items: flex-start; border-style: dashed; }
     .mini-card > div:last-child { display: flex; flex-direction: column; height: 100%; min-width: 0; }
-    .mini-icon { flex-shrink: 0; width: 40px; height: 40px; display: grid; place-items: center; border: 1.5px solid var(--ink); background: var(--paper-2); }
+    .mini-icon { flex-shrink: 0; width: 40px; height: 40px; display: grid; place-items: center; border: 1.5px solid var(--ink); background: var(--paper-2); border-radius: var(--radius-sm); }
     .mini-icon svg { width: 20px; height: 20px; }
     .mini-card h4 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
     .mini-card p { font-size: .86rem; color: var(--ink-2); margin-bottom: 14px; line-height: 1.6; }
     .mini-card .repo-link { margin-top: auto; padding-top: 14px; border: 0; }
-
-    /* ─────────────────────────────────────────────
-       BITÁCORA — registro de movimentação
-    ───────────────────────────────────────────── */
-    .log { padding: 0; }
-    .log table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: .8rem; }
-    .log th { text-align: left; font-size: .66rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); padding: 10px 16px; border-bottom: 1.5px solid var(--ink); }
-    .log td { padding: 11px 16px; border-bottom: 1px solid var(--line); vertical-align: top; }
-    .log tr:last-child td { border-bottom: 0; }
-    .log td:first-child { white-space: nowrap; color: var(--ink-2); font-variant-numeric: tabular-nums; width: 1%; }
-    .log td:last-child { white-space: nowrap; text-align: right; width: 1%; }
-    .log .ref { display: inline-block; padding: 1px 7px; border: 1px solid var(--ink); font-size: .66rem; font-weight: 600; }
-    .log .ref.lote { background: var(--ink); color: var(--paper); }
-    .log tr.live td { background: var(--paper-2); }
-    .log tr.live td:nth-child(2) { color: var(--ink); }
-    .log .msg { color: var(--ink-2); }
-    .log a { border-bottom: 1px solid var(--line); }
-    .log a:hover { border-color: var(--ink); }
 
     /* ─────────────────────────────────────────────
        CONTATO + RODAPÉ
@@ -794,15 +830,15 @@
     .contact-inner { max-width: 760px; }
     .contact-inner .lead { color: var(--ink-2); font-size: 1.06rem; margin-bottom: 34px; max-width: 600px; }
     .contact-buttons { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 22px; }
-    .contact-btn { display: inline-flex; align-items: center; gap: 10px; padding: 13px 22px; font-family: var(--font-mono); font-size: .86rem; font-weight: 600; border: 1.5px solid var(--ink); background: var(--card); box-shadow: var(--shadow); transition: transform .15s var(--ease), box-shadow .15s var(--ease), background .2s, color .2s; }
-    .contact-btn:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ink); background: var(--ink); color: var(--paper); }
+    .contact-btn { display: inline-flex; align-items: center; gap: 10px; padding: 13px 22px; font-family: var(--font-mono); font-size: .86rem; font-weight: 600; border: 1.5px solid var(--ink); background: var(--card); border-radius: var(--radius-sm); box-shadow: var(--shadow); transition: transform .25s var(--ease), box-shadow .25s var(--ease), background .2s, color .2s; }
+    .contact-btn:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); background: var(--ink); color: var(--paper); }
     .contact-btn svg { width: 18px; height: 18px; }
     .contact-extra { display: flex; gap: 10px; flex-wrap: wrap; }
-    .ghost-btn { font-family: var(--font-mono); font-size: .76rem; color: var(--ink-2); display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border: 1.5px dashed var(--ink-3); transition: color .2s, border-color .2s; }
+    .ghost-btn { font-family: var(--font-mono); font-size: .76rem; color: var(--ink-2); display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border: 1.5px dashed var(--ink-3); border-radius: var(--radius-sm); transition: color .2s, border-color .2s; }
     .ghost-btn:hover { color: var(--ink); border-color: var(--ink); border-style: solid; }
     .ghost-btn svg { width: 14px; height: 14px; }
 
-    .toast { position: fixed; left: 50%; bottom: 26px; z-index: 300; transform: translate(-50%, 160%); opacity: 0; visibility: hidden; background: var(--ink); color: var(--paper); font-family: var(--font-mono); font-size: .8rem; padding: 10px 16px; border-left: 6px solid var(--accent); transition: transform .45s var(--ease), opacity .3s, visibility 0s linear .45s; }
+    .toast { position: fixed; left: 50%; bottom: 26px; z-index: 300; transform: translate(-50%, 160%); opacity: 0; visibility: hidden; background: var(--ink); color: var(--paper); font-family: var(--font-mono); font-size: .8rem; padding: 10px 16px; border-left: 6px solid var(--accent); border-radius: var(--radius-sm); transition: transform .45s var(--ease), opacity .3s, visibility 0s linear .45s; }
     .toast.on { transform: translate(-50%, 0); opacity: 1; visibility: visible; transition: transform .45s var(--ease), opacity .3s; }
 
     footer { position: relative; z-index: 1; background: var(--ink); color: var(--paper); border-top: 4px solid var(--accent); }
@@ -815,7 +851,7 @@
     @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) footer { background: #0D0D0F; color: var(--ink); } }
 
     /* ordem das seções conforme o foco */
-    #sobre { order: 1; } #dados { order: 2; } #skills { order: 3; } #projetos { order: 4; } #bitacora { order: 8; } #contato { order: 9; }
+    #sobre { order: 1; } #dados { order: 2; } #skills { order: 3; } #projetos { order: 4; } #contato { order: 9; }
     body[data-foco="dev"] #projetos { order: 2; }
     body[data-foco="dev"] #skills   { order: 3; }
     body[data-foco="dev"] #dados    { order: 4; }
@@ -832,7 +868,7 @@
       .timeline::before, .timeline-fill { display: none; }
       .projects-grid, .mini-grid, .skills-grid { grid-template-columns: minmax(0, 1fr); }
       .featured .project-card .cols { flex-direction: column; }
-      .featured .demo { flex: none; min-height: 0; border-right: 0; border-bottom: 1.5px solid var(--ink); }
+      .featured .demo { flex: none; min-height: 0; border-right: 0; border-bottom: 1.5px solid var(--ink); border-bottom-left-radius: 0; }
       .colophon { grid-template-columns: 1fr; }
     }
     @media (max-width: 860px) {
@@ -844,9 +880,12 @@
       .section { padding: 76px 16px; }
       .hero-inner { padding: 0 16px; }
       .card { padding: 20px; }
+      .about-text, .project-card, .skill-card, .data-panel { padding: 0; }
       .stat { grid-column: span 3; }
       .stat.wide { grid-column: span 6; }
-      .facts { grid-template-columns: repeat(2, 1fr); }
+      .proof { margin-top: -24px; padding: 0 16px; }
+      .ship-chip { width: 100%; justify-content: center; }
+      .facts { grid-template-columns: repeat(2, 1fr); flex-basis: 100%; }
       .facts a:nth-child(3) { border-left: 0; }
       .facts a:nth-child(n+3) { border-top: 1.5px solid var(--ink); }
       .hero-actions .btn { flex: 1; justify-content: center; }
@@ -883,8 +922,6 @@
       .repo-links { flex-direction: column; align-items: stretch; }
       .live-btn .txt { flex: 1; justify-content: center; }
       .repo-links .repo-link { align-self: center; }
-      .log th:last-child, .log td:last-child { display: none; }
-      .log td, .log th { padding: 10px 12px; }
       .contact-buttons { flex-direction: column; align-items: stretch; }
       .contact-btn { justify-content: center; }
     }
@@ -895,11 +932,12 @@
       .stamp { transform: rotate(var(--r)) !important; }
       .section-title .w > span { transform: none !important; }
       .marquee-track { animation: none !important; }
+      .hero-text, .hero-avatar { translate: none !important; opacity: 1 !important; }
     }
 
     ::-webkit-scrollbar { width: 10px; }
     ::-webkit-scrollbar-track { background: var(--paper); border-left: 1.5px solid var(--ink); }
-    ::-webkit-scrollbar-thumb { background: var(--ink); border: 2px solid var(--paper); }
+    ::-webkit-scrollbar-thumb { background: var(--ink); border: 2px solid var(--paper); border-radius: 999px; }
     ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
 
     /* ─────────────────────────────────────────────
@@ -909,9 +947,9 @@
     @media print {
       *, *::before, *::after { animation: none !important; transition: none !important; box-shadow: none !important; }
       html, body { background: #fff !important; color: #1a1a1a !important; font-size: 9pt; line-height: 1.4; }
-      .progress, nav, .mobile-menu, #hero, .marquee, .demo, .viz-tip, .toast, #dados, #bitacora, #contato, footer,
+      .bg-grid, .proof, .progress, nav, .mobile-menu, #hero, .marquee, .demo, .viz-tip, .toast, #dados, #contato, footer,
       .sec-num, .section-label, .stat, .now-card, .label-head, .stamp, .project-icon, .mini-icon, .badges, .skill-hint,
-      .mini-grid, .mini-section-label, .repo-link svg, .live-btn .tape, .live-btn svg, .live-btn .dot-live, .repo-link.code, .tool-chip, .skill-group-title b { display: none !important; }
+      .mini-grid, .mini-section-label, .impact, .roadmap, .repo-link svg, .live-btn .tape, .live-btn svg, .live-btn .dot-live, .repo-link.code, .tool-chip, .skill-group-title b { display: none !important; }
       .print-only { display: block; }
       .reveal, .tag, .h-in { opacity: 1 !important; transform: none !important; }
       .section-title .w > span { transform: none !important; }
@@ -976,6 +1014,7 @@
 </head>
 
 <body data-foco="geral">
+  <div class="bg-grid" aria-hidden="true"></div>
 
   <!-- textura de carimbo (tinta irregular) -->
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -1003,7 +1042,6 @@
       <li data-s="dados"><a href="#dados" data-i18n="navDados">Dados</a></li>
       <li data-s="skills"><a href="#skills">Stack</a></li>
       <li data-s="projetos"><a href="#projetos" data-i18n="navProjetos">Projetos</a></li>
-      <li data-s="log"><a href="#bitacora" data-i18n="navLog">Diário</a></li>
       <li data-s="contato"><a href="#contato" data-i18n="navContato">Contato</a></li>
       <li class="nav-pill" id="navPill" aria-hidden="true"></li>
     </ul>
@@ -1032,8 +1070,7 @@
       <a href="#dados" data-s="dados"><small>02</small><span data-i18n="navDados">Dados</span></a>
       <a href="#skills" data-s="skills"><small>03</small>Stack</a>
       <a href="#projetos" data-s="projetos"><small>04</small><span data-i18n="navProjetos">Projetos</span></a>
-      <a href="#bitacora" data-s="log"><small>05</small><span data-i18n="navLog">Diário</span></a>
-      <a href="#contato" data-s="contato"><small>06</small><span data-i18n="navContato">Contato</span></a>
+      <a href="#contato" data-s="contato"><small>05</small><span data-i18n="navContato">Contato</span></a>
     </div>
     <div class="foco mm-foco">
       <span data-i18n="focoLabel">foco</span>
@@ -1047,7 +1084,7 @@
   </div>
 
   <!-- ── HERO ── -->
-  <section id="hero" aria-label="Apresentação" data-i18n-attr="aria-label:heroAria">
+  <section id="hero" aria-label="Apresentação" data-i18n-attr="aria-label:heroAria" data-tilt-area>
     <div class="hero-inner">
       <div class="hero-text">
         <div class="foco h-in" style="--d:0s">
@@ -1068,37 +1105,19 @@
           <span class="typed" id="typed"></span>
         </div>
 
-        <p class="title h-in" style="--d:.3s" data-i18n="heroTitle">
-          Ciência da Computação (5º período) <span class="accent">&amp;</span> <span class="em">Aprendiz de Armazém na Dunas</span> · Revenda Ambev
-        </p>
-        <a href="#sinc" class="ship-chip h-in" style="--d:.36s">
-          <span class="dot-live"></span>
-          <span data-i18n="shipChip"><b>Sinc</b> — meu SaaS para barbearias, em produção</span>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
-        </a>
-        <p class="bio h-in" style="--d:.42s">
-          <span class="v-base" data-i18n="bioBase">Construo software com base sólida no baixo nível: do rigor do gerenciamento de memória em <strong>C</strong> a um SaaS em produção com <strong>TypeScript</strong> e <strong>PostgreSQL</strong> — e uso <strong>SQL</strong> e <strong>Python</strong> para responder perguntas reais com dados.</span>
-          <span class="v-dados" data-i18n="bioDados">Da modelagem de bancos em <strong>SQL</strong> à análise em <strong>Python</strong> — transformo dados públicos e de negócio em respostas claras, com a base de quem entende o sistema por dentro e a operação logística no dia a dia.</span>
-        </p>
+        <p class="role h-in" style="--d:.3s" data-i18n="heroRole">Ciência da Computação · IFCE <span class="sep">/</span> Armazém · Dunas, Revenda Ambev</p>
 
-        <div class="facts h-in" style="--d:.5s">
-          <a href="#sinc"><b>1</b><span data-i18n="fact1">SaaS em produção</span></a>
-          <a href="#combustivel"><b data-i18n="fact2n">2,6 mi</b><span data-i18n="fact2">preços analisados</span></a>
-          <a href="#ecommerce"><b data-i18n="fact3n">100 mil</b><span data-i18n="fact3">pedidos analisados</span></a>
-          <a href="#ecommerce"><b>100</b><span data-i18n="fact4">Lighthouse no site</span></a>
-        </div>
-
-        <div class="hero-actions h-in" style="--d:.58s">
+        <div class="hero-actions h-in" style="--d:.4s">
           <a href="#projetos" class="btn btn-primary">
             <span data-i18n="btnProjetos">Ver projetos</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
           </a>
-          <a href="#dados" class="btn btn-secondary">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-            <span data-i18n="btnDados">GitHub em dados</span>
+          <a href="#contato" class="btn btn-secondary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <span data-i18n="btnContato">Fale comigo</span>
           </a>
         </div>
-        <div class="hero-social h-in" style="--d:.66s">
+        <div class="hero-social h-in" style="--d:.5s">
           <a href="https://www.linkedin.com/in/alexandrelopes0/" target="_blank" rel="noopener noreferrer">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
             linkedin
@@ -1119,7 +1138,7 @@
       </div>
 
       <div class="hero-avatar h-in" style="--d:.2s">
-        <div class="ship-label">
+        <div class="ship-label" data-tilt="10">
           <div class="label-head"><span data-i18n="lblRemetente">Remetente</span><b>CE · BR</b></div>
           <div class="photo">
             <img draggable="false" src="foto-perfil.jpg" alt="Foto de Alexandre Lopes" data-i18n-attr="alt:photoAlt" width="400" height="400" />
@@ -1137,10 +1156,25 @@
     </div>
   </section>
 
+  <!-- ── PROVAS: o que dá para conferir, logo abaixo da dobra ── -->
+  <div class="proof reveal" aria-label="Números que dá para conferir" data-i18n-attr="aria-label:proofAria">
+    <a href="#sinc" class="ship-chip">
+      <span class="dot-live"></span>
+      <span data-i18n="shipChip"><b>Sinc</b> — meu SaaS para barbearias, em produção</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+    </a>
+    <div class="facts">
+      <a href="#sinc"><b><span class="count" data-to="1">0</span></b><span data-i18n="fact1">SaaS em produção</span></a>
+      <a href="#combustivel"><b><span class="count" data-to="2.6" data-dec="1">0</span><span data-i18n="fact2u"> mi</span></b><span data-i18n="fact2">preços analisados</span></a>
+      <a href="#ecommerce"><b><span class="count" data-to="100">0</span><span data-i18n="fact3u"> mil</span></b><span data-i18n="fact3">pedidos analisados</span></a>
+      <a href="#ecommerce"><b><span class="count" data-to="100">0</span></b><span data-i18n="fact4">Lighthouse no site</span></a>
+    </div>
+  </div>
+
   <!-- ── FAIXA ── -->
   <div class="marquee" id="marqueeBox" aria-hidden="true">
     <div class="marquee-track" id="marquee">
-      <span>SQL</span><span>PostgreSQL</span><span>Python</span><span>pandas</span><span>Window Functions</span><span>TypeScript</span><span>Next.js</span><span>Supabase</span><span>RLS</span><span>C</span><span>D3</span><span>pytest</span><span>GitHub Actions</span><span>Excel</span><span>Git</span><span>Linux</span>
+      <span>SQL</span><span>PostgreSQL</span><span>Python</span><span>pandas</span><span>Window Functions</span><span>Pareto · Curva ABC</span><span>TypeScript</span><span>Next.js</span><span>Supabase</span><span>RLS</span><span>C</span><span>D3</span><span>pytest</span><span>GitHub Actions</span><span>Excel</span><span>Git</span><span>Linux</span>
     </div>
   </div>
 
@@ -1159,10 +1193,14 @@
           <div class="card about-text reveal" style="--d:.05s">
             <div class="label-head"><span data-i18n="aboutFile">ficha · sobre</span><b>CE · BR</b></div>
             <div class="body">
+              <p class="about-lead bio">
+                <span class="v-base" data-i18n="bioBase">Construo software com base sólida no baixo nível: do rigor do gerenciamento de memória em <strong>C</strong> a um SaaS em produção com <strong>TypeScript</strong> e <strong>PostgreSQL</strong> — e uso <strong>SQL</strong> e <strong>Python</strong> para responder perguntas reais com dados.</span>
+                <span class="v-dados" data-i18n="bioDados">Da modelagem de bancos em <strong>SQL</strong> à análise em <strong>Python</strong> — transformo dados públicos e de negócio em respostas claras, com a base de quem entende o sistema por dentro e a operação de armazém no dia a dia.</span>
+              </p>
               <p data-i18n="about1">Ciência da Computação no <strong>IFCE</strong> (5º período) e Aprendiz de Armazém na <strong>Dunas — Revenda Ambev</strong>.</p>
               <p data-i18n="about2">Antes, na TI da <strong>Maris Pescados</strong>, transformei minha vivência prática em infraestrutura em uma visão sistêmica para o desenvolvimento de software.</p>
               <p data-i18n="about3">Domino <strong>C</strong> e <strong>SQL</strong>, e hoje mantenho o <strong>Sinc</strong>, um SaaS de agendamento e gestão para barbearias em produção — do modelo de dados em PostgreSQL à interface em Next.js.</p>
-              <p data-i18n="about4">Hoje, entre o armazém e a faculdade, aplico <strong>Python</strong>, <strong>SQL</strong> e <strong>Análise de Dados</strong> a perguntas reais de negócio — como o custo do diesel numa operação de distribuição — unindo a solidez da infraestrutura a análises de alto impacto.</p>
+              <p data-i18n="about4">Hoje, entre o armazém e a faculdade, aplico <strong>Python</strong>, <strong>SQL</strong> e <strong>Análise de Dados</strong> a perguntas reais de negócio — como onde um armazém de bebidas perde dinheiro com avarias — unindo a solidez da infraestrutura a análises de alto impacto.</p>
             </div>
           </div>
 
@@ -1181,7 +1219,7 @@
 
           <div class="card now-card reveal" style="--d:.05s">
             <span class="now-label"><span class="dot-live"></span><span data-i18n="nowLabel">agora</span></span>
-            <span class="now-text" data-i18n="nowText">Evoluindo o Sinc · análises de dados em SQL e Python</span>
+            <span class="now-text" data-i18n="nowText">Evoluindo o Sinc · projeto de perdas no armazém em SQL e Python</span>
             <span class="now-bar" aria-hidden="true"></span>
           </div>
         </div>
@@ -1348,7 +1386,7 @@
 
           <!-- LOTE 001 · SINC -->
           <div class="reveal featured" id="sinc">
-            <article class="card project-card">
+            <article class="card project-card" data-tilt="5">
               <div class="label-head"><span><span data-i18n="lote">Lote</span> 001 · Sinc</span><svg class="barcode" data-barcode="SINC" aria-hidden="true"></svg></div>
               <div class="cols">
                 <div class="demo" aria-hidden="true">
@@ -1365,11 +1403,20 @@
 <span class="k">exclude using gist</span> (barber_id <span class="k">with</span> =,
   <span class="f">tstzrange</span>(inicio, fim) <span class="k">with</span> &amp;&amp;)</pre>
                   <span class="demo-caption" data-i18n="capRls">trecho simplificado do projeto · postgresql</span>
+                  <a class="shot" href="https://sincbarber.com.br" target="_blank" rel="noopener noreferrer" tabindex="-1">
+                    <span class="bar"><span class="url">sincbarber.com.br</span><span class="go" data-i18n="shotGo">abrir ↗</span></span>
+                    <video src="img/demo-sinc.webm" poster="img/sinc.jpg" muted loop playsinline preload="none" width="960" height="600"></video>
+                  </a>
                 </div>
                 <div class="project-body">
                   <span class="stamp" data-i18n="stampProd" aria-hidden="true">Em produção</span>
                   <span class="project-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/></svg></span>
                   <h3 data-i18n="p0h">Sinc — SaaS para barbearias</h3>
+                  <div class="impact">
+                    <div><b><span class="count" data-to="42">0</span></b><span>migrations</span></div>
+                    <div><b><span class="count" data-to="17">0</span></b><span data-i18n="i0b">tabelas com RLS</span></div>
+                    <div><b><span class="count" data-to="80">0</span>+</b><span data-i18n="i0c">funções SQL</span></div>
+                  </div>
                   <dl class="case">
                     <dt data-i18n="caseP">Problema</dt>
                     <dd data-i18n="c0q">Barbearias precisam de agenda online, comissões, estoque e financeiro num lugar só — às vezes em várias unidades.</dd>
@@ -1403,10 +1450,64 @@
             </article>
           </div>
 
-          <!-- LOTE 002 · COMBUSTÍVEL -->
+          <!-- LOTE 002 · ARMAZÉM (em andamento: sem números até publicar) -->
+          <div class="reveal featured" id="armazem">
+            <article class="card project-card" data-tilt="5">
+              <div class="label-head"><span><span data-i18n="lote">Lote</span> 002 · <span data-i18n="loteArm">Armazém</span></span><svg class="barcode" data-barcode="WAREHOUSE-LOSS" aria-hidden="true"></svg></div>
+              <div class="cols">
+                <div class="demo" aria-hidden="true">
+                  <span class="live-pill wip-pill"><span class="dot-live"></span><span data-i18n="armWip">em construção · v1 refugo &amp; avarias</span></span>
+<pre class="policy"><span class="c" data-i18n="armC1">-- quais motivos explicam 80% da perda?</span>
+<span class="k">with</span> perdas <span class="k">as</span> (
+  <span class="k">select</span> motivo, <span class="f">sum</span>(valor) <span class="k">as</span> perda
+  <span class="k">from</span> avarias <span class="k">group by</span> motivo
+)
+<span class="k">select</span> motivo, perda,
+  <span class="f">sum</span>(perda) <span class="k">over</span> (<span class="k">order by</span> perda <span class="k">desc</span>)
+    / <span class="f">sum</span>(perda) <span class="k">over</span> () <span class="k">as</span> acumulado
+<span class="k">from</span> perdas <span class="k">order by</span> perda <span class="k">desc</span>;</pre>
+                  <span class="demo-caption" data-i18n="capArm">prévia do método · curva de Pareto em sql</span>
+                </div>
+                <div class="project-body">
+                  <span class="stamp orange" data-i18n="stampWip" aria-hidden="true">Em andamento</span>
+                  <span class="project-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V8l9-5 9 5v13"/><path d="M7 21v-8h10v8"/><path d="M7 17h10"/></svg></span>
+                  <h3 data-i18n="p3h">Perdas no Armazém — Refugo &amp; Avarias</h3>
+                  <ol class="roadmap">
+                    <li class="now" data-i18n="r1">v1 refugo &amp; avarias</li>
+                    <li data-i18n="r2">v2 inventário</li>
+                    <li data-i18n="r3">v3 validade · FEFO</li>
+                    <li data-i18n="r4">v4 devoluções</li>
+                  </ol>
+                  <dl class="case">
+                    <dt data-i18n="caseQ">Pergunta</dt>
+                    <dd data-i18n="c3q">Onde um armazém de bebidas perde mais dinheiro com avaria, e quais poucas causas explicam a maior parte da perda?</dd>
+                    <dt data-i18n="caseH">Como fiz</dt>
+                    <dd data-i18n="c3h">Volumes reais de um armazém público de bebidas (Montgomery County, EUA, atualizado todo mês) e taxas de perda por etapa da <strong>FAO</strong>. Sobre essa base, uma camada <strong>simulada e declarada</strong> de avarias por embalagem, etapa e motivo, analisada com <strong>SQL</strong> (window functions) e <strong>Python</strong> com testes.</dd>
+                    <dt data-i18n="caseN">Próximos</dt>
+                    <dd data-i18n="c3n">v1 Refugo &amp; avarias → v2 Acuracidade de inventário → v3 Validade (FEFO) → v4 Devoluções. Números só entram aqui quando cada etapa for publicada.</dd>
+                  </dl>
+                  <div class="why"><div><p>
+                    <b data-i18n="whyLabel">por que importa ·</b>
+                    <span data-for="dev" data-i18n="p3dev">Mesmo padrão dos outros lotes, pipeline idempotente, testes e CI, agora sobre a rotina que vivo no armazém.</span>
+                    <span data-for="dados" data-i18n="p3dados">Pareto de perdas, curva ABC e simulador de economia: análise pensada para virar decisão no chão do armazém.</span>
+                  </p></div></div>
+                  <div class="project-tools">
+                    <span class="tool-chip">Python</span>
+                    <span class="tool-chip">pandas</span>
+                    <span class="tool-chip">SQL</span>
+                    <span class="tool-chip">PostgreSQL</span>
+                    <span class="tool-chip">pytest</span>
+                    <span class="tool-chip">Next.js</span>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <!-- LOTE 003 · COMBUSTÍVEL -->
           <div class="reveal" id="combustivel" style="--d:.05s">
-            <article class="card project-card">
-              <div class="label-head"><span><span data-i18n="lote">Lote</span> 002 · ANP</span><svg class="barcode" data-barcode="LOGISTICS-DISTRIBUTION" aria-hidden="true"></svg></div>
+            <article class="card project-card" data-tilt="5">
+              <div class="label-head"><span><span data-i18n="lote">Lote</span> 003 · ANP</span><svg class="barcode" data-barcode="LOGISTICS-DISTRIBUTION" aria-hidden="true"></svg></div>
               <div class="demo" aria-hidden="true">
                 <div class="demo-top">
                   <span data-i18n="rulerTitle">diesel · R$/L por região</span>
@@ -1416,16 +1517,21 @@
                 <span class="demo-caption" data-i18n="capRuler">dados reais · ANP · média ponderada</span>
                 <a class="shot" href="https://combustivel-logistica.vercel.app/pt/" target="_blank" rel="noopener noreferrer" tabindex="-1" data-i18n-attr="href:urlLog">
                   <span class="bar"><span class="url">combustivel-logistica.vercel.app</span><span class="go" data-i18n="shotGo">abrir ↗</span></span>
-                  <img src="img/combustivel.jpg" alt="" loading="lazy" width="960" height="600" />
+                  <video src="img/demo-combustivel.webm" poster="img/combustivel.jpg" muted loop playsinline preload="none" width="960" height="600"></video>
                 </a>
               </div>
               <div class="project-body">
                 <span class="stamp orange" data-i18n="stampDone" aria-hidden="true">Entregue</span>
                 <span class="project-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V5a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v16"/><path d="M2.5 21h14"/><rect x="7" y="6.5" width="5" height="4"/><path d="M15 12h2a2 2 0 0 1 2 2v3.5a1.25 1.25 0 0 0 2.5 0V9l-3-3"/></svg></span>
                 <h3 data-i18n="p1h">Combustível &amp; Logística</h3>
+                <div class="impact">
+                  <div><b><span class="count" data-to="2.6" data-dec="1">0</span><span data-i18n="fact2u"> mi</span></b><span data-i18n="i1a">preços da ANP</span></div>
+                  <div><b>+<span class="count" data-to="7.4" data-dec="1">0</span>%</b><span data-i18n="i1b">diesel no Norte</span></div>
+                  <div><b><span class="count" data-to="32">0</span></b><span data-i18n="i1c">testes automatizados</span></div>
+                </div>
                 <dl class="case">
                   <dt data-i18n="caseQ">Pergunta</dt>
-                  <dd data-i18n="c1q">Quanto custa abastecer uma operação de distribuição no Brasil, onde e com que risco?</dd>
+                  <dd data-i18n="c1q">Quanto custa abastecer a frota que sai do armazém, em cada região do Brasil, e com que risco?</dd>
                   <dt data-i18n="caseH">Como fiz</dt>
                   <dd data-i18n="c1h">Extração idempotente de 72 CSVs da ANP (<strong>2,6 mi preços</strong>, 2023–2025), carga incremental em <strong>PostgreSQL</strong>/SQLite, uma query <strong>SQL</strong> por pergunta de negócio e métricas em <strong>Python</strong> cobertas por 32 testes.</dd>
                   <dt data-i18n="caseR">Resultado</dt>
@@ -1456,6 +1562,10 @@
                     <span class="tape" aria-hidden="true"></span>
                     <span class="txt"><span class="dot-live"></span><span data-i18n="verSite">Ver no ar</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></span>
                   </a>
+                  <a href="https://github.com/lopsxzale/logistics-distribution-analytics#readme" target="_blank" rel="noopener noreferrer" class="repo-link">
+                    <span data-i18n="lerCase">Ler o case completo</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+                  </a>
                   <a href="https://github.com/lopsxzale/logistics-distribution-analytics" target="_blank" rel="noopener noreferrer" class="repo-link code">
                     <span data-i18n="verCodigo">Ver código</span>
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
@@ -1465,10 +1575,10 @@
             </article>
           </div>
 
-          <!-- LOTE 003 · E-COMMERCE -->
+          <!-- LOTE 004 · E-COMMERCE -->
           <div class="reveal" id="ecommerce" style="--d:.1s">
-            <article class="card project-card">
-              <div class="label-head"><span><span data-i18n="lote">Lote</span> 003 · Olist</span><svg class="barcode" data-barcode="ECOMMERCE-SALES" aria-hidden="true"></svg></div>
+            <article class="card project-card" data-tilt="5">
+              <div class="label-head"><span><span data-i18n="lote">Lote</span> 004 · Olist</span><svg class="barcode" data-barcode="ECOMMERCE-SALES" aria-hidden="true"></svg></div>
               <div class="demo" aria-hidden="true">
                 <div class="demo-top">
                   <span data-i18n="scoreTitle">nota média × atraso na entrega</span>
@@ -1479,13 +1589,18 @@
                 <span class="demo-caption" data-i18n="capScore">dados reais · 96 mil pedidos · Olist</span>
                 <a class="shot" href="https://vendas-e-commercebr.vercel.app/pt/" target="_blank" rel="noopener noreferrer" tabindex="-1" data-i18n-attr="href:urlEcom">
                   <span class="bar"><span class="url">vendas-e-commercebr.vercel.app</span><span class="go" data-i18n="shotGo">abrir ↗</span></span>
-                  <img src="img/ecommerce.jpg" alt="" loading="lazy" width="960" height="456" />
+                  <video src="img/demo-ecommerce.webm" poster="img/ecommerce.jpg" muted loop playsinline preload="none" width="960" height="600"></video>
                 </a>
               </div>
               <div class="project-body">
                 <span class="stamp orange" data-i18n="stampTested" aria-hidden="true">Testado</span>
                 <span class="project-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M21 8l-9-5-9 5v8l9 5 9-5z"/><path d="M3 8l9 5 9-5"/><path d="M12 13v8"/><path d="M7.5 5.5l9 5"/></svg></span>
                 <h3 data-i18n="p2h">E-commerce Sales Analytics</h3>
+                <div class="impact">
+                  <div><b><span class="count" data-to="96">0</span><span data-i18n="fact3u"> mil</span></b><span data-i18n="i2a">pedidos reais</span></div>
+                  <div><b class="sm" data-i18n="i2n">4,29 → 2,27</b><span data-i18n="i2b">nota com atraso</span></div>
+                  <div><b><span class="count" data-to="26">0</span>%</b><span data-i18n="i2c">receita em risco</span></div>
+                </div>
                 <dl class="case">
                   <dt data-i18n="caseQ">Pergunta</dt>
                   <dd data-i18n="c2q">O que 100 mil pedidos reais revelam sobre o e-commerce brasileiro?</dd>
@@ -1517,6 +1632,10 @@
                   <a href="https://vendas-e-commercebr.vercel.app/pt/" target="_blank" rel="noopener noreferrer" class="live-btn" data-i18n-attr="href:urlEcom">
                     <span class="tape" aria-hidden="true"></span>
                     <span class="txt"><span class="dot-live"></span><span data-i18n="verSite">Ver no ar</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></span>
+                  </a>
+                  <a href="https://github.com/lopsxzale/ecommerce-sales-analytics#readme" target="_blank" rel="noopener noreferrer" class="repo-link">
+                    <span data-i18n="lerCase">Ler o case completo</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
                   </a>
                   <a href="https://github.com/lopsxzale/ecommerce-sales-analytics" target="_blank" rel="noopener noreferrer" class="repo-link code">
                     <span data-i18n="verCodigo">Ver código</span>
@@ -1584,39 +1703,6 @@
       </div>
     </section>
 
-    <!-- ── DIÁRIO DE BORDO ── -->
-    <section id="bitacora" class="wrap" aria-labelledby="t-log">
-      <div class="section">
-        <div class="sec-head">
-          <span class="sec-num" aria-hidden="true">05</span>
-          <p class="section-label" data-i18n="lblLog">registro de movimentação</p>
-          <h2 class="section-title reveal" id="t-log" data-i18n="tLog">Diário de bordo</h2>
-        </div>
-        <p class="section-sub reveal" data-i18n="logSub">O que eu construí e quando — com datas tiradas do histórico do Git. A primeira linha é consultada ao vivo.</p>
-
-        <div class="card log reveal" style="--d:.05s">
-          <div class="label-head"><span data-i18n="logHead">manifesto de movimentação</span><b id="logStatus">git log</b></div>
-          <table>
-            <thead><tr><th data-i18n="thData">data</th><th data-i18n="thEvento">evento</th><th data-i18n="thRef">ref.</th></tr></thead>
-            <tbody>
-              <tr class="live">
-                <td id="logDate">2026-11-01</td>
-                <td><span data-i18n="logLive">último commit deste site:</span> <span class="msg" id="logMsg">nova identidade visual: manifesto de carga</span></td>
-                <td><a class="ref" href="https://github.com/lopsxzale/lopsxzale.github.io/commits/main" target="_blank" rel="noopener noreferrer">git</a></td>
-              </tr>
-              <tr><td>2026-11-01</td><td data-i18n="log1"><a href="https://vendas-e-commercebr.vercel.app/pt/" target="_blank" rel="noopener noreferrer">E-commerce Sales Analytics</a> publicado: pipeline, testes, CI e site bilíngue</td><td><a class="ref lote" href="#ecommerce">003</a></td></tr>
-              <tr><td>2026-11-01</td><td data-i18n="log2"><a href="https://combustivel-logistica.vercel.app/pt/" target="_blank" rel="noopener noreferrer">Combustível &amp; Logística</a> publicado com simulador de custo de frota</td><td><a class="ref lote" href="#combustivel">002</a></td></tr>
-              <tr><td>2026-10-31</td><td data-i18n="log3">Início dos dois projetos de dados: extração da ANP e carga dos 100 mil pedidos da Olist</td><td><span class="ref">git</span></td></tr>
-              <tr><td>2026-10</td><td data-i18n="log4">Sinc entra em produção com barbearias reais</td><td><a class="ref lote" href="#sinc">001</a></td></tr>
-              <tr><td>2026-10-19</td><td data-i18n="log5">Portfólio v2: focos Dev/Dados, versão em inglês e CV em PDF gerado pela própria página</td><td><span class="ref">git</span></td></tr>
-              <tr><td>2026-08</td><td data-i18n="log6">Começo como Aprendiz de Armazém na Dunas · Revenda Ambev</td><td><span class="ref">CV</span></td></tr>
-              <tr><td>2026-05-26</td><td data-i18n="log7">Primeira versão deste portfólio</td><td><span class="ref">git</span></td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
     <!-- ── CONTATO ── -->
     <section id="contato" class="wrap" aria-labelledby="t-contato">
       <div class="section">
@@ -1668,9 +1754,8 @@
       </div>
       <div>
         <h5 data-i18n="colH2">versão</h5>
-        <p><span data-i18n="colUpd">Última atualização:</span> <b id="lastUpdate">2026-11-01</b><br>
-          <span data-i18n="colHost">Hospedado no GitHub Pages ·</span>
-          <a href="https://github.com/lopsxzale/lopsxzale.github.io" target="_blank" rel="noopener noreferrer" style="border-bottom:1px solid currentColor" data-i18n="colSrc">código-fonte</a></p>
+        <p><span data-i18n="colUpd">Última atualização:</span> <b>2026-11-02</b><br>
+          <span data-i18n="colHost">Hospedado no GitHub Pages</span></p>
       </div>
       <p class="fine"><span>© <span id="year"></span> Alexandre Lopes</span><span data-i18n="loc">Ceará, BR · UTC−3</span></p>
     </div>
@@ -1704,24 +1789,24 @@
     /* ── DICIONÁRIO EN (o PT fica no próprio HTML) ── */
     const EN = {
       navAria: 'Main navigation', homeAria: 'Home', heroAria: 'Introduction', themeAria: 'Toggle light/dark theme',
-      navSobre: 'About', navDados: 'Data', navProjetos: 'Projects', navLog: 'Log', navContato: 'Contact',
+      navSobre: 'About', navDados: 'Data', navProjetos: 'Projects', navContato: 'Contact',
       focoLabel: 'focus', focoAria: 'Portfolio focus', focoGeral: 'All', focoDados: 'Data',
       eyebrow: 'Manifest no. 001 · Portfolio', tickerK: 'contents ›',
-      heroTitle: 'Computer Science (5th semester) <span class="accent">&amp;</span> <span class="em">Warehouse Apprentice at Dunas</span> · Ambev Distributor',
+      heroRole: 'Computer Science · IFCE <span class="sep">/</span> Warehouse · Dunas, Ambev Distributor', proofAria: 'Numbers you can check',
       shipChip: '<b>Sinc</b> — my SaaS for barbershops, in production',
       bioBase: 'I build software on a solid low-level foundation: from the rigor of memory management in <strong>C</strong> to a production SaaS with <strong>TypeScript</strong> and <strong>PostgreSQL</strong> — and I use <strong>SQL</strong> and <strong>Python</strong> to answer real questions with data.',
-      bioDados: 'From database modeling in <strong>SQL</strong> to analysis in <strong>Python</strong> — I turn public and business data into clear answers, with the foundation of someone who understands the system from the inside and works in logistics operations every day.',
-      fact1: 'SaaS in production', fact2n: '2.6M', fact2: 'prices analyzed', fact3n: '100k', fact3: 'orders analyzed', fact4: 'Lighthouse score',
-      btnProjetos: 'See projects', btnDados: 'GitHub in data', loc: 'Ceará, Brazil · UTC−3',
+      bioDados: 'From database modeling in <strong>SQL</strong> to analysis in <strong>Python</strong> — I turn public and business data into clear answers, with the foundation of someone who understands the system from the inside and works in warehouse operations every day.',
+      fact1: 'SaaS in production', fact2u: 'M', fact2: 'prices analyzed', fact3u: 'k', fact3: 'orders analyzed', fact4: 'Lighthouse score',
+      btnProjetos: 'See projects', btnContato: 'Get in touch', loc: 'Ceará, Brazil · UTC−3',
       lblRemetente: 'Sender', fNome: 'name', fAtual: 'current', fCurso: 'degree', fCursoV: 'Computer Science · IFCE', fConteudo: 'contents', fConteudoV: 'Dev &amp; Data',
       photoAlt: 'Photo of Alexandre Lopes', badge: 'Dunas · Ambev Distributor', stampOk: 'Checked',
       lblSobre: 'sender file', tSobre: 'About me', aboutFile: 'file · about',
       about1: 'Computer Science at <strong>IFCE</strong> (5th semester) and Warehouse Apprentice at <strong>Dunas — Ambev Distributor</strong>.',
       about2: 'Before that, in IT at <strong>Maris Pescados</strong>, I turned hands-on infrastructure experience into a systemic view of software development.',
       about3: 'I\'m proficient in <strong>C</strong> and <strong>SQL</strong>, and today I maintain <strong>Sinc</strong>, a booking and management SaaS for barbershops in production — from the PostgreSQL data model to the Next.js interface.',
-      about4: 'Today, between the warehouse and university, I apply <strong>Python</strong>, <strong>SQL</strong> and <strong>Data Analysis</strong> to real business questions — like the cost of diesel in a distribution operation — combining solid infrastructure with high-impact analysis.',
+      about4: 'Today, between the warehouse and university, I apply <strong>Python</strong>, <strong>SQL</strong> and <strong>Data Analysis</strong> to real business questions — like where a beverage warehouse loses money to breakage — combining solid infrastructure with high-impact analysis.',
       ord: 'th', statPeriodo: 'Semester — IFCE', statAnos: 'Years in IT', statLog: 'Warehouse', statAtual: 'Current — Dunas · Ambev Distributor',
-      nowLabel: 'now', nowText: 'Evolving Sinc · data analysis in SQL and Python',
+      nowLabel: 'now', nowText: 'Evolving Sinc · warehouse losses project in SQL and Python',
       expTitle: 'experience &amp; education',
       tl1tag: '06/2024 – 04/2025', tl1h: 'Administrative Assistant — Maris Pescados', tl1p: 'Administrative routines at Maris Pescados — my way into the company\'s IT team.',
       tl2tag: '2024.2 – 2028.2 · education', tl2h: 'Computer Science — IFCE', tl2p: '5th semester. Foundations in C, data structures and databases.',
@@ -1753,10 +1838,21 @@
       c0r: 'In production since 10/2026, used by real barbershops, with finances and ROI per product coming straight from the database — and a constraint that makes it impossible to book two clients at the same time.',
       p0dev: 'A real, multi-tenant product with continuous deployment — from schema to the screen the customer uses.',
       p0dados: 'Finances, commissions and ROI computed in SQL functions — the numbers come straight from the database.',
+      loteArm: 'Warehouse', armWip: 'in progress · v1 breakage &amp; damage', armC1: '-- which reasons explain 80% of the loss?',
+      capArm: 'method preview · Pareto curve in sql', stampWip: 'In progress', caseN: 'Next',
+      p3h: 'Warehouse Losses — Breakage &amp; Damage',
+      c3q: 'Where does a beverage warehouse lose the most money to damage, and which few causes explain most of the loss?',
+      c3h: 'Real volumes from a public beverage warehouse (Montgomery County, USA, updated monthly) and loss rates by supply-chain stage from the <strong>FAO</strong>. On top of that, a <strong>simulated, clearly labeled</strong> layer of damage by packaging, stage and reason, analyzed with <strong>SQL</strong> (window functions) and tested <strong>Python</strong>.',
+      c3n: 'v1 Breakage &amp; damage → v2 Inventory accuracy → v3 Expiry (FEFO) → v4 Returns. Numbers only show up here once each stage is published.',
+      p3dev: 'Same pattern as the other lots, idempotent pipeline, tests and CI, now applied to the routine I live in the warehouse.',
+      p3dados: 'Loss Pareto, ABC curve and a savings simulator: analysis designed to become a decision on the warehouse floor.',
+      i0b: 'tables with RLS', i0c: 'SQL functions', i1a: 'ANP fuel prices', i1b: 'diesel in the North', i1c: 'automated tests',
+      i2a: 'real orders', i2n: '4.29 → 2.27', i2b: 'score when late', i2c: 'revenue at risk', lerCase: 'Read the full case',
+      r1: 'v1 breakage &amp; damage', r2: 'v2 inventory', r3: 'v3 expiry · FEFO', r4: 'v4 returns',
       rulerTitle: 'diesel · R$/L by region', capRuler: 'real data · ANP · weighted mean',
       urlLog: 'https://combustivel-logistica.vercel.app/en/', urlEcom: 'https://vendas-e-commercebr.vercel.app/en/',
       p1h: 'Fuel &amp; Logistics',
-      c1q: 'How much does it cost to fuel a distribution operation in Brazil, where, and at what risk?',
+      c1q: 'How much does it cost to fuel the fleet that leaves the warehouse, in each region of Brazil, and at what risk?',
       c1h: 'Idempotent extraction of 72 CSVs from ANP, Brazil\'s fuel regulator (<strong>2.6M prices</strong>, 2023–2025), incremental load into <strong>PostgreSQL</strong>/SQLite, one <strong>SQL</strong> query per business question and <strong>Python</strong> metrics covered by 32 tests.',
       c1r: 'The North pays R$ 6.40/L, <strong>7.4% above</strong> the rest of the country, which is practically tied. The findings become budget recommendations and a fleet cost simulator.',
       p1dev: 'Reproducible, idempotent pipeline, tests that validate the data contract of the site, and CI for both the pipeline and the build.',
@@ -1779,23 +1875,12 @@
       m2dev: 'Operating system integration and background processes.',
       m2dados: 'Automating repetitive routines with Python — more time left to analyze.',
       chipSo: 'OS Automation',
-      lblLog: 'movement record', tLog: 'Logbook',
-      logSub: 'What I built and when — dates taken from Git history. The first row is fetched live.',
-      logHead: 'movement manifest', thData: 'date', thEvento: 'event', thRef: 'ref.',
-      logLive: 'latest commit to this site:',
-      log1: '<a href="https://vendas-e-commercebr.vercel.app/en/" target="_blank" rel="noopener noreferrer">E-commerce Sales Analytics</a> published: pipeline, tests, CI and bilingual site',
-      log2: '<a href="https://combustivel-logistica.vercel.app/en/" target="_blank" rel="noopener noreferrer">Fuel &amp; Logistics</a> published with a fleet cost simulator',
-      log3: 'Started both data projects: ANP extraction and loading 100k Olist orders',
-      log4: 'Sinc goes into production with real barbershops',
-      log5: 'Portfolio v2: Dev/Data focus, English version and a PDF CV generated by the page itself',
-      log6: 'Started as Warehouse Apprentice at Dunas · Ambev Distributor',
-      log7: 'First version of this portfolio',
       lblContato: 'recipient', tContato: 'Let\'s talk',
       contatoLead: 'I enjoy problems that involve data, performance and real systems. If you have one like that, or just want to talk about one of the projects, reach out.',
       cvBtn: 'Download CV (PDF)',
       colH1: 'colophon',
       colP1: 'No template, no framework: <b>HTML, CSS and JavaScript</b> in a single file, with GitHub data fetched live. Typeset in <b>Archivo Black</b> and <b>IBM Plex</b>. The visual identity comes from the cargo labels and manifests I see every day in logistics.',
-      colH2: 'version', colUpd: 'Last updated:', colHost: 'Hosted on GitHub Pages ·', colSrc: 'source code',
+      colH2: 'version', colUpd: 'Last updated:', colHost: 'Hosted on GitHub Pages',
       cvGeral: 'Computer Science · IFCE (5th semester) — Software Development &amp; Data Analysis',
       cvDev: 'Computer Science · IFCE (5th semester) — Software Development focus',
       cvDados: 'Computer Science · IFCE (5th semester) — Data Analysis focus',
@@ -1806,9 +1891,9 @@
     const JS = {
       pt: {
         typed: {
-          geral: ['SaaS em produção · Sinc', 'SQL & análise de dados', 'Python & pipelines de dados', 'C & estruturas de dados', 'dados → decisões'],
+          geral: ['SaaS em produção · Sinc', 'do armazém aos dados', 'SQL & análise de dados', 'Python & pipelines de dados', 'C & estruturas de dados', 'dados → decisões'],
           dev:   ['Next.js + TypeScript', 'PostgreSQL & RLS', 'pipelines Python → PostgreSQL', 'CI com GitHub Actions', 'C & estruturas de dados'],
-          dados: ['SQL analítico · window functions', '2,6 mi preços · ANP', '100 mil pedidos · e-commerce', 'Python & estatística', 'dados → decisões'],
+          dados: ['SQL analítico · window functions', 'Pareto de perdas · armazém', '2,6 mi preços · ANP', '100 mil pedidos · e-commerce', 'Python & estatística', 'dados → decisões'],
         },
         live: 'ao vivo · api.github.com', ref: 'dados de referência', loading: 'carregando…',
         run: '▶ executar', running: 'executando…', rows: (n) => `✓ ${n} linhas`,
@@ -1829,9 +1914,9 @@ ORDER  BY pct DESC;`,
       },
       en: {
         typed: {
-          geral: ['SaaS in production · Sinc', 'SQL & data analysis', 'Python & data pipelines', 'C & data structures', 'data → decisions'],
+          geral: ['SaaS in production · Sinc', 'from the warehouse to data', 'SQL & data analysis', 'Python & data pipelines', 'C & data structures', 'data → decisions'],
           dev:   ['Next.js + TypeScript', 'PostgreSQL & RLS', 'Python → PostgreSQL pipelines', 'CI with GitHub Actions', 'C & data structures'],
-          dados: ['analytical SQL · window functions', '2.6M fuel prices · ANP', '100k e-commerce orders', 'Python & statistics', 'data → decisions'],
+          dados: ['analytical SQL · window functions', 'warehouse loss Pareto', '2.6M fuel prices · ANP', '100k e-commerce orders', 'Python & statistics', 'data → decisions'],
         },
         live: 'live · api.github.com', ref: 'reference data', loading: 'loading…',
         run: '▶ run', running: 'running…', rows: (n) => `✓ ${n} rows`,
@@ -1858,10 +1943,32 @@ ORDER  BY pct DESC;`,
     const metaTheme = $('meta[name="theme-color"]');
     const isDark = () => root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
     const syncThemeColor = () => metaTheme.setAttribute('content', isDark() ? '#141416' : '#F2EFE8');
-    $('#themeBtn').addEventListener('click', () => {
+    const flipTheme = () => {
       root.dataset.theme = isDark() ? 'light' : 'dark';
       store.set('theme', root.dataset.theme);
       syncThemeColor();
+    };
+    $('#themeBtn').addEventListener('click', (e) => {
+      if (reduce) return flipTheme();
+      // foco/idioma no meio de uma transição: só esmaece as cores
+      if (!document.startViewTransition || setState.vt) {
+        root.classList.add('theme-anim');
+        flipTheme();
+        clearTimeout(flipTheme.t);
+        flipTheme.t = setTimeout(() => root.classList.remove('theme-anim'), 550);
+        return;
+      }
+      // pelo teclado não há coordenada do clique: usa o centro do botão
+      const b = e.currentTarget.getBoundingClientRect();
+      const x = e.clientX || b.left + b.width / 2, y = e.clientY || b.top + b.height / 2;
+      const r = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+      root.classList.add('theme-vt');
+      const vt = document.startViewTransition(flipTheme);
+      vt.ready.then(() => root.animate(
+        { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${r}px at ${x}px ${y}px)`] },
+        { duration: 750, easing: 'cubic-bezier(.65,0,.35,1)', pseudoElement: '::view-transition-new(root)' },
+      )).catch(() => {});
+      vt.finished.finally(() => root.classList.remove('theme-vt'));
     });
     syncThemeColor();
 
@@ -2007,6 +2114,7 @@ ORDER  BY pct DESC;`,
     const links = $$('#navLinks a');
     const sectionEls = links.map(a => $(a.getAttribute('href')));
     const timeline = $('#timeline'), tlFill = $('.timeline-fill', timeline), tlItems = $$('.tl-item', timeline);
+    const hero = $('#hero'), grid = $('.bg-grid');
     let ticking = false, activeId = null;
 
     const refreshNav = (force) => {
@@ -2029,6 +2137,10 @@ ORDER  BY pct DESC;`,
       const y = scrollY, max = document.documentElement.scrollHeight - innerHeight;
       bar.style.transform = `scaleX(${max > 0 ? y / max : 0})`;
       nav.classList.toggle('scrolled', y > 30);
+      if (!reduce) {
+        grid.style.transform = `translate3d(0, ${(-(y * .15) % 24).toFixed(1)}px, 0)`;
+        if (y < innerHeight * 1.2) hero.style.setProperty('--hp', Math.min(y / innerHeight, 1).toFixed(3));
+      }
       refreshNav(false);
       if (mqMobile.matches) {
         const r = timeline.getBoundingClientRect();
@@ -2058,18 +2170,37 @@ ORDER  BY pct DESC;`,
     /* ── REVEAL + CONTADORES + TAGS ── */
     $$('.tags').forEach(g => $$('.tag', g).forEach((tg, i) => tg.style.transitionDelay = `${.15 + i * .05}s`));
 
+    const fmtCount = (el, v) => {
+      const d = +(el.dataset.dec || 0);
+      el.textContent = v.toLocaleString(state.lang === 'en' ? 'en-US' : 'pt-BR', { minimumFractionDigits: d, maximumFractionDigits: d });
+    };
     const countUp = (el) => {
       const to = +el.dataset.to;
-      const done = () => el.parentElement.classList.add('done');
-      if (reduce) { el.textContent = to; done(); return; }
-      const t0 = performance.now(), dur = 1100;
+      const done = () => { el.dataset.done = ''; fmtCount(el, to); el.parentElement.classList.add('done'); };
+      if (reduce) { done(); return; }
+      const t0 = performance.now(), dur = 1400;
       const step = (now) => {
         const k = Math.min((now - t0) / dur, 1);
-        el.textContent = Math.round(to * (1 - Math.pow(1 - k, 3)));
+        fmtCount(el, to * (1 - Math.pow(1 - k, 4)));
         if (k < 1) requestAnimationFrame(step); else done();
       };
       requestAnimationFrame(step);
     };
+    onState((langChanged) => { if (langChanged) $$('.count[data-done]').forEach(el => fmtCount(el, +el.dataset.to)); });
+
+    /* ── INCLINAÇÃO: etiqueta e cartões seguem o mouse ── */
+    if (!reduce && matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      $$('[data-tilt]').forEach(el => {
+        const max = +el.dataset.tilt, area = el.closest('[data-tilt-area]') || el;
+        area.addEventListener('pointermove', e => {
+          const r = el.getBoundingClientRect(), a = area === el ? r : area.getBoundingClientRect();
+          const px = (e.clientX - (r.left + r.width / 2)) / a.width, py = (e.clientY - (r.top + r.height / 2)) / a.height;
+          el.style.setProperty('--ry', (Math.max(-.5, Math.min(.5, px)) * max).toFixed(2) + 'deg');
+          el.style.setProperty('--rx', (Math.max(-.5, Math.min(.5, -py)) * max).toFixed(2) + 'deg');
+        });
+        area.addEventListener('pointerleave', () => { el.style.removeProperty('--rx'); el.style.removeProperty('--ry'); });
+      });
+    }
 
     const io = new IntersectionObserver(entries => {
       entries.forEach(e => {
@@ -2082,7 +2213,7 @@ ORDER  BY pct DESC;`,
     $$('.reveal').forEach(el => io.observe(el));
 
     /* ── STACK → PROVA: a tag leva ao projeto e destaca o cartão ── */
-    $$('a.tag[href^="#"], .facts a, .log a.ref[href^="#"]').forEach(a => a.addEventListener('click', () => {
+    $$('a.tag[href^="#"], .facts a').forEach(a => a.addEventListener('click', () => {
       const target = $(a.getAttribute('href'));
       const card = target && $('.card', target);
       if (!card) return;
@@ -2105,10 +2236,25 @@ ORDER  BY pct DESC;`,
       new IntersectionObserver(([e]) => {
         on = e.isIntersecting;
         if (on && !timer) next();
-        if (!on) { clearTimeout(timer); timer = null; }
+        if (!on) { clearTimeout(timer); timer = null; $$('video', root).forEach(v => v.pause()); }
       }, { threshold: .3 }).observe(root);
       return { reset() { clearTimeout(timer); timer = null; i = 0; if (on) next(); } };
     };
+
+    /* site no ar: o vídeo só toca enquanto está à mostra (com movimento reduzido, fica o poster) */
+    const showShot = (demo, on) => {
+      demo.classList.toggle('show-shot', on);
+      const v = $('.shot video', demo);
+      if (!v || reduce) return;
+      if (on) { v.currentTime = 0; v.play().catch(() => {}); } else v.pause();
+    };
+    const SHOT_MS = 11000;
+
+    const sincDemo = $('#sinc .demo');
+    runner(() => [
+      [() => showShot(sincDemo, false), 5000],
+      [() => showShot(sincDemo, true), SHOT_MS],
+    ], sincDemo);
 
     /* régua: diesel por região (médias ponderadas reais, 2023–2025) */
     const numFmt = (v, d) => v.toLocaleString(state.lang === 'en' ? 'en-US' : 'pt-BR', { minimumFractionDigits: d, maximumFractionDigits: d });
@@ -2130,11 +2276,11 @@ ORDER  BY pct DESC;`,
     buildRuler();
     const rows = () => $$('.ruler-row', rulerEl);
     const rulerRun = runner(() => [
-      [() => { rulerDemo.classList.remove('show-shot'); rows().forEach(r => r.classList.remove('on', 'hot', 'gap')); rulerNote.textContent = '2023–2025'; rulerNote.classList.remove('alert'); }, 700],
+      [() => { showShot(rulerDemo, false); rows().forEach(r => r.classList.remove('on', 'hot', 'gap')); rulerNote.textContent = '2023–2025'; rulerNote.classList.remove('alert'); }, 700],
       ...[0, 1, 2, 3].map(i => [() => rows()[i].classList.add('on'), 420]),
       [() => rows()[4].classList.add('on', 'hot'), 700],
       [() => { rows()[4].classList.add('gap'); rulerNote.textContent = t('rulerNote'); rulerNote.classList.add('alert'); }, 3000],
-      [() => rulerDemo.classList.add('show-shot'), 3800],
+      [() => showShot(rulerDemo, true), SHOT_MS],
     ], rulerDemo);
 
     /* nota média × atraso (dados reais, Olist) */
@@ -2151,10 +2297,10 @@ ORDER  BY pct DESC;`,
     buildScores();
     const cols = () => $$('.score-col', scoreEl);
     const scoreRun = runner(() => [
-      [() => { scoreDemo.classList.remove('show-shot'); cols().forEach(c => c.classList.remove('on')); scoreEl.classList.remove('done'); scoreNote.textContent = '★ 1–5'; scoreNote.classList.remove('alert'); }, 700],
+      [() => { showShot(scoreDemo, false); cols().forEach(c => c.classList.remove('on')); scoreEl.classList.remove('done'); scoreNote.textContent = '★ 1–5'; scoreNote.classList.remove('alert'); }, 700],
       ...SCORES.map((_, i) => [() => cols()[i].classList.add('on'), i ? 480 : 800]),
       [() => { scoreEl.classList.add('done'); scoreNote.textContent = t('scoreNote'); scoreNote.classList.add('alert'); }, 3000],
-      [() => scoreDemo.classList.add('show-shot'), 3800],
+      [() => showShot(scoreDemo, true), SHOT_MS],
     ], scoreDemo);
 
     onState((langChanged) => { if (langChanged) { buildRuler(); buildScores(); rulerRun.reset(); scoreRun.reset(); } });
@@ -2203,26 +2349,6 @@ ORDER  BY pct DESC;`,
     addEventListener('beforeprint', () => { document.title = t('cvTitle')[state.foco]; });
     addEventListener('afterprint', () => { document.title = docTitle; });
     $$('[data-cv]').forEach(b => b.addEventListener('click', () => window.print()));
-
-    /* ── DIÁRIO + COLOFÃO: último commit do site, ao vivo ── */
-    (async () => {
-      let c = null;
-      try { c = JSON.parse(sessionStorage.getItem('gh-last-commit')); } catch {}
-      if (!c) {
-        try {
-          const res = await fetch('https://api.github.com/repos/lopsxzale/lopsxzale.github.io/commits?per_page=1');
-          if (!res.ok) throw new Error(res.status);
-          const [last] = await res.json();
-          c = { date: last.commit.committer.date.slice(0, 10), msg: last.commit.message.split('\n')[0], url: last.html_url };
-          try { sessionStorage.setItem('gh-last-commit', JSON.stringify(c)); } catch {}
-        } catch { return; }
-      }
-      $('#logDate').textContent = c.date;
-      $('#lastUpdate').textContent = c.date;
-      const msg = $('#logMsg');
-      msg.textContent = c.msg;
-      msg.title = c.msg;
-    })();
 
     /* ── ABAS: gráfico | tabela ── */
     const tabsEl = $('#tabs'), tabInk = $('.tab-ink', tabsEl);

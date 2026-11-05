@@ -1441,7 +1441,7 @@
     ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
 
     /* ─────────────────────────────────────────────
-       CV (impressão → PDF, 1 página A4)
+       Currículo (impressão → PDF, 1 página A4)
     ───────────────────────────────────────────── */
     @page { size: A4; margin: 11mm 13mm; }
     @media print {
@@ -1472,6 +1472,9 @@
       .bento { display: block; }
       .about-text .body { padding: 0; }
       .about-text p { color: #1a1a1a !important; font-size: 8.8pt; margin-bottom: 2.5pt; }
+      .about-lead { font-size: 9.2pt !important; font-weight: 500; line-height: 1.45; padding: 0 0 3pt !important; border: 0 !important; }
+      /* no papel, cabeçalho e experiência já dizem isso */
+      .about-text [data-i18n="about1"], .about-text [data-i18n="about3"] { display: none; }
       strong { color: #000 !important; }
       .timeline { display: flex; flex-direction: column; gap: 2.5pt !important; padding: 0; }
       .timeline::before, .timeline-fill, .tl-item::before { display: none !important; }
@@ -1481,9 +1484,19 @@
       .tl-item p { font-size: 8.4pt; color: #333 !important; line-height: 1.35; }
       .tl-item[data-o="1"] { order: 1; } .tl-item[data-o="2"] { order: 2; } .tl-item[data-o="3"] { order: 3; } .tl-item[data-o="4"] { order: 4; } .tl-item[data-o="5"] { order: 5; }
       .skills-grid { display: block; }
-      .skill-card { display: grid !important; grid-template-columns: 120pt 1fr; column-gap: 8pt; margin-bottom: 2pt; }
-      .skill-card .label-head { display: block !important; background: none; color: #111; padding: 0; font-size: 7.4pt; letter-spacing: .08em; }
-      .skill-card .tags { padding: 0; display: block; }
+      .project-card, .skill-card, .about-text { overflow: visible !important; }
+      .skill-card { display: grid !important; grid-template-columns: 92pt 1fr; column-gap: 8pt; margin-bottom: 3pt; }
+      .skill-card .label-head { display: block !important; background: none; color: #555; border: 0; padding: 1.5pt 0 0; font-size: 7pt; letter-spacing: .06em; line-height: 1.35; }
+      .skill-card .tags { padding: 0; display: block; line-height: 1.5; }
+      .lang-list { display: flex !important; flex-direction: column; gap: 0; }
+      .lang-list .tag { display: block !important; padding: 0 !important; margin: 0; border-radius: 0; font-size: 8.4pt; line-height: 1.5; }
+      .lang-list .tag::before { content: none; }
+      .lang-list .tag[href="#combustivel"] { order: 1; } .lang-list .tag[href="#fundamentos"] { order: 2; }
+      .lang-list .tag[href="#sinc"] { order: 3; } .lang-list .tag[href="#armazem"] { order: 4; }
+      .lang-list .tag b { font-family: inherit !important; font-size: 8.4pt; font-weight: 700; letter-spacing: 0; color: #111 !important; }
+      .lang-list .tag b::after { content: ':'; }
+      .lang-list .tag span { color: #333 !important; font-size: 8.4pt; }
+      .lang-list .tag span::before { content: ' '; }
       .tag { display: inline; padding: 0; margin-right: 7pt; border: 0 !important; background: none !important; color: #1a1a1a !important; font-size: 8.4pt; font-weight: 400; }
       a.tag::after { content: none !important; }
       .tag::before { content: '▪ '; color: #888; }
@@ -1531,7 +1544,7 @@
 
   <div class="progress" id="progress"></div>
 
-  <!-- ── CABEÇALHO DO CV (só na impressão) ── -->
+  <!-- ── CABEÇALHO DO CURRÍCULO (só na impressão) ── -->
   <header class="print-only cv-head">
     <h1>Alexandre Lopes</h1>
     <p class="cv-role">
@@ -1640,7 +1653,7 @@
           </a>
           <button type="button" data-cv>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            cv.pdf
+            curriculo.pdf
           </button>
           <span class="loc">
             <span class="dot-live" aria-hidden="true"></span>
@@ -2284,7 +2297,7 @@
             <div class="contact-extra reveal" style="--d:.14s">
               <button class="ghost-btn" type="button" data-cv>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                <span data-i18n="cvBtn">Baixar CV (PDF)</span>
+                <span data-i18n="cvBtn">Baixar currículo (PDF)</span>
               </button>
               <button class="ghost-btn" id="copyMail" type="button">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
@@ -2490,7 +2503,7 @@
       chipSo: 'OS Automation',
       lblContato: 'recipient', tContato: 'Let\'s talk',
       contatoLead: 'I enjoy problems that involve data, performance and real systems. If you have one like that, or just want to talk about one of the projects, reach out.',
-      cvBtn: 'Download CV (PDF)',
+      cvBtn: 'Download resume (PDF)',
       colH1: 'colophon',
       colP1: 'No template, no framework: <b>HTML, CSS and JavaScript</b> in a single file, with GitHub data fetched live. Typeset in <b>Geist</b> and <b>Geist Mono</b>. Motion uses only <i>transform</i> and <i>opacity</i>, so it stays smooth even on low-end phones.',
       colH2: 'version', colUpd: 'Last updated:', colHost: 'Hosted on GitHub Pages',
@@ -2515,7 +2528,7 @@
         regions: ['Sudeste', 'Nordeste', 'Sul', 'Centro-Oeste', 'Norte'], rulerNote: 'resto do país: ±0,4%',
         delays: ['no prazo', '1–3 d', '4–7 d', '8–14 d', '15+ d'], scoreNote: '−2,02★ · p < 0,001',
         copied: '✓ e-mail copiado',
-        cvTitle: { geral: 'CV - Alexandre Lopes', dev: 'CV - Alexandre Lopes - Dev', dados: 'CV - Alexandre Lopes - Dados' },
+        cvTitle: { geral: 'Currículo - Alexandre Lopes', dev: 'Currículo - Alexandre Lopes - Dev', dados: 'Currículo - Alexandre Lopes - Dados' },
         query:
 `SELECT linguagem,
        ROUND(100.0 * SUM(bytes) / (SELECT SUM(bytes) FROM codigo), 1) AS pct,
@@ -2538,7 +2551,7 @@ ORDER  BY pct DESC;`,
         regions: ['Southeast', 'Northeast', 'South', 'Center-West', 'North'], rulerNote: 'rest of Brazil: ±0.4%',
         delays: ['on time', '1–3 d', '4–7 d', '8–14 d', '15+ d'], scoreNote: '−2.02★ · p < 0.001',
         copied: '✓ email copied',
-        cvTitle: { geral: 'CV - Alexandre Lopes', dev: 'CV - Alexandre Lopes - Dev', dados: 'CV - Alexandre Lopes - Data' },
+        cvTitle: { geral: 'Resume - Alexandre Lopes', dev: 'Resume - Alexandre Lopes - Dev', dados: 'Resume - Alexandre Lopes - Data' },
         query:
 `SELECT language,
        ROUND(100.0 * SUM(bytes) / (SELECT SUM(bytes) FROM code), 1) AS pct,
@@ -2899,7 +2912,7 @@ ORDER  BY pct DESC;`,
       { g: 'Links', label: 'GitHub', hint: '@lopsxzale', keys: 'github codigo code repo', icon: 'out', run: ext('https://github.com/lopsxzale') },
       { g: 'Links', label: 'LinkedIn', keys: 'linkedin', icon: 'out', run: ext('https://www.linkedin.com/in/alexandrelopes0/') },
       { g: L('Ações', 'Actions'), label: L('Copiar e-mail', 'Copy email'), keys: 'email e-mail copiar copy', icon: 'copy', run: () => $('#copyMail').click() },
-      { g: L('Ações', 'Actions'), label: L('Baixar CV (PDF)', 'Download CV (PDF)'), keys: 'cv curriculo resume pdf', icon: 'down', run: () => setTimeout(() => window.print(), 250) },
+      { g: L('Ações', 'Actions'), label: L('Baixar currículo (PDF)', 'Download resume (PDF)'), keys: 'cv curriculo resume pdf', icon: 'down', run: () => setTimeout(() => window.print(), 250) },
       { g: L('Ações', 'Actions'), label: L('Alternar tema claro/escuro', 'Toggle light/dark theme'), keys: 'tema theme dark light escuro claro', icon: 'theme', run: () => $('#themeBtn').click() },
       { g: L('Ações', 'Actions'), label: L('Switch to English', 'Mudar para português'), keys: 'idioma language english portugues', icon: 'lang', run: () => setState({ lang: state.lang === 'en' ? 'pt' : 'en' }) },
       { g: L('Foco', 'Focus'), label: L('Foco: Geral', 'Focus: General'), keys: 'foco focus geral general', icon: 'foco', run: () => setState({ foco: 'geral' }) },
@@ -3115,9 +3128,9 @@ ORDER  BY pct DESC;`,
     const cf = $('#contactForm');
     const CF_TXT = {
       pt: { invalid: 'Confira os campos destacados.', subject: (n) => `Portfólio · mensagem de ${n}`,
-            fail: 'Não consegui enviar agora. Tente de novo ou escreva para <a href="mailto:alefilhoyt@gmail.com">alefilhoyt@gmail.com</a>.' },
+            fail: (href) => `Não consegui enviar agora. Abrindo seu e-mail como alternativa — se nada acontecer, <a href="${href}">clique aqui</a> ou escreva para <a href="mailto:alefilhoyt@gmail.com">alefilhoyt@gmail.com</a>.` },
       en: { invalid: 'Please check the highlighted fields.', subject: (n) => `Portfolio · message from ${n}`,
-            fail: 'Could not send right now. Try again or email <a href="mailto:alefilhoyt@gmail.com">alefilhoyt@gmail.com</a>.' },
+            fail: (href) => `Could not send right now. Opening your email app instead — if nothing happens, <a href="${href}">click here</a> or email <a href="mailto:alefilhoyt@gmail.com">alefilhoyt@gmail.com</a>.` },
     };
     const cfFields = [$('#cfName'), $('#cfEmail'), $('#cfMsg')];
     const cfErr = $('#cfError'), cfBtn = $('.cf-submit', cf), cfCount = $('#cfCount');
@@ -3154,7 +3167,9 @@ ORDER  BY pct DESC;`,
         cfFields.forEach(el => { el.classList.remove('touched'); el.removeAttribute('aria-invalid'); });
         $('#cfAgain').focus({ preventScroll: true });
       } catch (err) {
-        cfErr.innerHTML = T.fail;
+        const mailtoHref = `mailto:alefilhoyt@gmail.com?subject=${encodeURIComponent(T.subject(name))}&body=${encodeURIComponent(`${message}\n\n— ${name} (${email})`)}`;
+        cfErr.innerHTML = T.fail(mailtoHref);
+        window.location.href = mailtoHref;
       } finally {
         cf.classList.remove('loading'); cfBtn.disabled = false;
       }
@@ -3173,7 +3188,7 @@ ORDER  BY pct DESC;`,
       catch { showToast('alefilhoyt@gmail.com'); }
     });
 
-    /* ── CV: imprime a versão limpa (respeita foco e idioma) ── */
+    /* ── Currículo: imprime a versão limpa (respeita foco e idioma) ── */
     const docTitle = document.title;
     addEventListener('beforeprint', () => { document.title = t('cvTitle')[state.foco]; });
     addEventListener('afterprint', () => { document.title = docTitle; });

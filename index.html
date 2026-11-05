@@ -1479,7 +1479,8 @@
       .timeline { display: flex; flex-direction: column; gap: 2.5pt !important; padding: 0; }
       .timeline::before, .timeline-fill, .tl-item::before { display: none !important; }
       .tl-item { display: grid; grid-template-columns: 92pt 1fr; column-gap: 8pt; padding: 0 0 2.5pt; }
-      .tl-tag { grid-row: span 2; color: #555 !important; font-size: 7pt; padding-top: 1.5pt; }
+      .tl-tag { grid-row: span 2; color: #555 !important; font-size: 7pt; padding-top: 1.5pt; white-space: nowrap; }
+      .tl-sub { display: none; }
       .tl-item h4 { font-size: 9pt; margin: 0; color: #111; }
       .tl-item p { font-size: 8.4pt; color: #333 !important; line-height: 1.35; }
       .tl-item[data-o="1"] { order: 1; } .tl-item[data-o="2"] { order: 2; } .tl-item[data-o="3"] { order: 3; } .tl-item[data-o="4"] { order: 4; } .tl-item[data-o="5"] { order: 5; }
@@ -1506,11 +1507,10 @@
       .project-body { padding: 0 !important; display: block; }
       .project-card, .mini-card, .mini-card > div:last-child, .featured .project-card .cols { display: block !important; height: auto; }
       .project-card h3, .mini-card h4 { display: inline; font-family: var(--font-sans); font-weight: 700; text-transform: none; font-size: 9pt; color: #111; margin: 0; }
-      .case { display: block; border: 0; margin: 1pt 0 0; }
-      .case dt { display: inline; padding: 0; border: 0; color: #555 !important; font-size: 7pt; }
-      .case dt::after { content: ' '; }
-      .case dd { display: inline; padding: 0; border: 0; font-size: 8.4pt; color: #333 !important; line-height: 1.38; }
-      .case dd::after { content: ' '; }
+      .case { display: block; border: 0; margin: 3pt 0 0; }
+      .case dt { display: block; padding: 0; border: 0; color: #555 !important; font-size: 6.6pt; margin: 4pt 0 0; }
+      .case dt:first-child { margin-top: 0; }
+      .case dd { display: block; padding: 0; border: 0; font-size: 8.4pt; color: #333 !important; line-height: 1.38; margin: 1pt 0 0; }
       .mini-card p { font-size: 8.4pt !important; color: #333 !important; margin: 1pt 0 0 !important; line-height: 1.38 !important; }
       .mini-section-label { color: #555 !important; font-size: 7pt; margin: 5pt 0 3pt; } .mini-section-label::after { display: none; }
       .repo-links { display: inline; padding: 0; }
@@ -1769,7 +1769,7 @@
             <p data-i18n="tl1p">Rotinas administrativas na Maris Pescados — a porta de entrada para a área de TI da empresa.</p>
           </div>
           <div class="tl-item" data-o="5" style="--td:.7s">
-            <span class="tl-tag" data-i18n="tl2tag">2024.2 – 2028.2 · formação</span>
+            <span class="tl-tag" data-i18n="tl2tag">2024.2 – 2028.2 <span class="tl-sub">· formação</span></span>
             <h4 data-i18n="tl2h">Ciência da Computação — IFCE</h4>
             <p data-i18n="tl2p">5º período. Base em C, estruturas de dados e bancos de dados.</p>
           </div>
@@ -1784,7 +1784,7 @@
             <p data-i18n="tl4p">Revenda Ambev. Rotina de armazém no dia a dia, enquanto evoluo em Python, SQL e Análise de Dados.</p>
           </div>
           <div class="tl-item current" data-o="1" style="--td:1.9s">
-            <span class="tl-tag" data-i18n="tl5tag">10/2026 – atual · projeto próprio</span>
+            <span class="tl-tag" data-i18n="tl5tag">10/2026 – atual <span class="tl-sub">· projeto próprio</span></span>
             <h4 data-i18n="tl5h">Criador do Sinc — SaaS para barbearias</h4>
             <p data-i18n="tl5p">Plataforma de agendamento e gestão em produção, do banco de dados ao deploy.</p>
           </div>
@@ -2432,10 +2432,10 @@
       nowLabel: 'now', nowText: 'Evolving Sinc · next Warehouse stage: expiry (FEFO)',
       expTitle: 'experience &amp; education',
       tl1tag: '06/2024 – 04/2025', tl1h: 'Administrative Assistant — Maris Pescados', tl1p: 'Administrative routines at Maris Pescados — my way into the company\'s IT team.',
-      tl2tag: '2024.2 – 2028.2 · education', tl2h: 'Computer Science — IFCE', tl2p: '5th semester. Foundations in C, data structures and databases.',
+      tl2tag: '2024.2 – 2028.2 <span class="tl-sub">· education</span>', tl2h: 'Computer Science — IFCE', tl2p: '5th semester. Foundations in C, data structures and databases.',
       tl3tag: '04/2025 – 06/2026', tl3h: 'IT — Maris Pescados', tl3p: 'Hands-on infrastructure that became a systemic view of software.',
       tl4tag: '08/2026 – present', tl4h: 'Warehouse Apprentice — Dunas', tl4p: 'Ambev distributor. Day-to-day warehouse routine while I grow in Python, SQL and Data Analysis.',
-      tl5tag: '10/2026 – present · own project', tl5h: 'Creator of Sinc — SaaS for barbershops', tl5p: 'Booking and management platform in production, from database to deploy.',
+      tl5tag: '10/2026 – present <span class="tl-sub">· own project</span>', tl5h: 'Creator of Sinc — SaaS for barbershops', tl5p: 'Booking and management platform in production, from database to deploy.',
       lblDados: 'inspection', tDados: 'What my repositories say',
       dadosSub: 'Language distribution across my public repositories — computed live from the GitHub API, the way I\'d do it in SQL.',
       dataHead: 'live query', dataTitle: 'languages by repository',

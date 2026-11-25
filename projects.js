@@ -11,7 +11,7 @@
   const detailSlot = dialog.querySelector('.project-dialog-content');
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
   const english = () => document.documentElement.lang === 'en';
-  let active = 0, sourceBody = null, sourceParent = null, trigger = null, oldOverflow = '';
+  let active = cards.findIndex(card => card.dataset.project === 'sinc'), sourceBody = null, sourceParent = null, trigger = null, oldOverflow = '';
 
   const measure = (card) => {
     const box = card.querySelector('.preview-window');

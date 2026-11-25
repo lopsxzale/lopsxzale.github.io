@@ -1524,6 +1524,7 @@
       .why b { color: #111 !important; }
     }
   </style>
+  <link rel="stylesheet" href="projects.css" />
 </head>
 
 <body data-foco="geral">
@@ -1919,10 +1920,126 @@
           <h2 class="section-title reveal" id="t-projetos" data-i18n="tProjetos">Projetos em destaque</h2>
         </div>
 
-        <div class="projects-grid">
+        <div class="project-carousel" role="region" aria-label="Carrossel de projetos em destaque" aria-roledescription="carrossel" data-i18n-attr="aria-label:carouselAria;aria-roledescription:carouselRole">
+          <div class="carousel-toolbar">
+            <div class="carousel-arrows">
+              <button class="carousel-arrow" type="button" data-prev aria-label="Projeto anterior" data-i18n-attr="aria-label:carouselPrev" aria-controls="project-stage">←</button>
+              <button class="carousel-arrow" type="button" data-next aria-label="Próximo projeto" data-i18n-attr="aria-label:carouselNext" aria-controls="project-stage">→</button>
+            </div>
+            <span class="carousel-count">01 / 06</span>
+            <span class="carousel-hint" data-i18n="carouselHint">arraste para explorar</span>
+          </div>
+          <div class="carousel-stage" id="project-stage" tabindex="0" aria-label="Projetos em destaque" data-i18n-attr="aria-label:tProjetos">
+          <article class="showcase-card" data-project="pizzadesk" data-position="0" style="--position:0" role="group" aria-roledescription="slide" data-i18n-attr="aria-roledescription:slideRole">
+            <div class="preview-address" aria-hidden="true">pizzadesk.app</div>
+            <div class="preview-window"><img src="img/full-pizzadesk.jpg" alt="Captura de tela de PizzaDesk" data-i18n-attr="alt:preview0" width="960" height="1814" loading="lazy" decoding="async" draggable="false" /></div>
+            <div class="showcase-copy">
+              <span class="project-kind" data-i18n="kind0">Sistema para pizzarias</span>
+              <h3>PizzaDesk</h3>
+              <p class="showcase-summary" data-i18n="summary0">Cardápio, pedidos, entregas e caixa conectados em um só lugar.</p>
+              <div class="showcase-actions">
+                <button class="showcase-details" type="button" aria-haspopup="dialog" aria-controls="project-dialog" data-i18n="showcaseDetails">Ver detalhes</button>
+                <a class="showcase-live" href="https://pizzadesk.app" target="_blank" rel="noopener noreferrer" data-i18n="showcaseLive">Ver no ar ↗</a>
+              </div>
+            </div>
+          </article>
+          <article class="showcase-card" data-project="sinc" data-position="1" style="--position:1" role="group" aria-roledescription="slide" data-i18n-attr="aria-roledescription:slideRole">
+            <div class="preview-address" aria-hidden="true">sincbarber.com.br</div>
+            <div class="preview-window"><img src="img/full-sinc.jpg" alt="Captura de tela de Sinc" data-i18n-attr="alt:preview1" width="960" height="2100" loading="lazy" decoding="async" draggable="false" /></div>
+            <div class="showcase-copy">
+              <span class="project-kind" data-i18n="kind1">SaaS para barbearias</span>
+              <h3>Sinc</h3>
+              <p class="showcase-summary" data-i18n="summary1">Agenda, comissões, estoque e financeiro para barbearias reais.</p>
+              <div class="showcase-actions">
+                <button class="showcase-details" type="button" aria-haspopup="dialog" aria-controls="project-dialog" data-i18n="showcaseDetails">Ver detalhes</button>
+                <a class="showcase-live" href="https://sincbarber.com.br" target="_blank" rel="noopener noreferrer" data-i18n="showcaseLive">Ver no ar ↗</a>
+              </div>
+            </div>
+          </article>
+          <article class="showcase-card" data-project="rosi" data-position="2" style="--position:2" role="group" aria-roledescription="slide" data-i18n-attr="aria-roledescription:slideRole">
+            <div class="preview-address" aria-hidden="true">rosilenefelix.vercel.app</div>
+            <div class="preview-window"><img src="img/full-rosi.jpg" alt="Captura de tela de RosiConfeitaria" data-i18n-attr="alt:preview2" width="960" height="1816" loading="lazy" decoding="async" draggable="false" /></div>
+            <div class="showcase-copy">
+              <span class="project-kind" data-i18n="kind2">Confeitaria artesanal</span>
+              <h3>RosiConfeitaria</h3>
+              <p class="showcase-summary" data-i18n="summary2">Bolos, doces e combos em uma experiência de encomenda online.</p>
+              <div class="showcase-actions">
+                <button class="showcase-details" type="button" aria-haspopup="dialog" aria-controls="project-dialog" data-i18n="showcaseDetails">Ver detalhes</button>
+                <a class="showcase-live" href="https://rosilenefelix.vercel.app" target="_blank" rel="noopener noreferrer" data-i18n="showcaseLive">Ver no ar ↗</a>
+              </div>
+            </div>
+          </article>
+          <article class="showcase-card" data-project="armazem" data-position="3" style="--position:3" role="group" aria-roledescription="slide" data-i18n-attr="aria-roledescription:slideRole">
+            <div class="preview-address" aria-hidden="true">perdas-armazem.vercel.app/pt</div>
+            <div class="preview-window"><img src="img/full-armazem.jpg" alt="Captura de tela de Armazém" data-i18n-attr="alt:preview3" width="960" height="2100" loading="lazy" decoding="async" draggable="false" /></div>
+            <div class="showcase-copy">
+              <span class="project-kind" data-i18n="kind3">Análise de operações</span>
+              <h3>Armazém</h3>
+              <p class="showcase-summary" data-i18n="summary3">Dados de avarias e inventário transformados em decisões para o armazém.</p>
+              <div class="showcase-actions">
+                <button class="showcase-details" type="button" aria-haspopup="dialog" aria-controls="project-dialog" data-i18n="showcaseDetails">Ver detalhes</button>
+                <a class="showcase-live" href="https://perdas-armazem.vercel.app/pt/" target="_blank" rel="noopener noreferrer" data-i18n-attr="href:urlArm" data-i18n="showcaseLive">Ver no ar ↗</a>
+              </div>
+            </div>
+          </article>
+          <article class="showcase-card" data-project="combustivel" data-position="4" style="--position:4" role="group" aria-roledescription="slide" data-i18n-attr="aria-roledescription:slideRole">
+            <div class="preview-address" aria-hidden="true">combustivel-logistica.vercel.app/pt</div>
+            <div class="preview-window"><img src="img/full-combustivel.jpg" alt="Captura de tela de Combustíveis" data-i18n-attr="alt:preview4" width="960" height="2100" loading="lazy" decoding="async" draggable="false" /></div>
+            <div class="showcase-copy">
+              <span class="project-kind" data-i18n="kind4">Dados públicos · ANP</span>
+              <h3>Combustíveis</h3>
+              <p class="showcase-summary" data-i18n="summary4">Uma análise de 2,6 milhões de preços para entender o custo do diesel.</p>
+              <div class="showcase-actions">
+                <button class="showcase-details" type="button" aria-haspopup="dialog" aria-controls="project-dialog" data-i18n="showcaseDetails">Ver detalhes</button>
+                <a class="showcase-live" href="https://combustivel-logistica.vercel.app/pt/" target="_blank" rel="noopener noreferrer" data-i18n-attr="href:urlLog" data-i18n="showcaseLive">Ver no ar ↗</a>
+              </div>
+            </div>
+          </article>
+          <article class="showcase-card" data-project="ecommerce" data-position="5" style="--position:5" role="group" aria-roledescription="slide" data-i18n-attr="aria-roledescription:slideRole">
+            <div class="preview-address" aria-hidden="true">vendas-e-commercebr.vercel.app/pt</div>
+            <div class="preview-window"><img src="img/full-ecommerce.jpg" alt="Captura de tela de E-commerce" data-i18n-attr="alt:preview5" width="960" height="2100" loading="lazy" decoding="async" draggable="false" /></div>
+            <div class="showcase-copy">
+              <span class="project-kind" data-i18n="kind5">Dados de vendas · Olist</span>
+              <h3>E-commerce</h3>
+              <p class="showcase-summary" data-i18n="summary5">O impacto dos atrasos na satisfação e na receita do e-commerce.</p>
+              <div class="showcase-actions">
+                <button class="showcase-details" type="button" aria-haspopup="dialog" aria-controls="project-dialog" data-i18n="showcaseDetails">Ver detalhes</button>
+                <a class="showcase-live" href="https://vendas-e-commercebr.vercel.app/pt/" target="_blank" rel="noopener noreferrer" data-i18n-attr="href:urlEcom" data-i18n="showcaseLive">Ver no ar ↗</a>
+              </div>
+            </div>
+          </article>
+          </div>
+          <div class="carousel-footer"><div class="carousel-dots"><button class="carousel-dot" type="button" aria-label="Mostrar PizzaDesk" data-i18n-attr="aria-label:choose0" aria-current="true"></button><button class="carousel-dot" type="button" aria-label="Mostrar Sinc" data-i18n-attr="aria-label:choose1" aria-current="false"></button><button class="carousel-dot" type="button" aria-label="Mostrar RosiConfeitaria" data-i18n-attr="aria-label:choose2" aria-current="false"></button><button class="carousel-dot" type="button" aria-label="Mostrar Armazém" data-i18n-attr="aria-label:choose3" aria-current="false"></button><button class="carousel-dot" type="button" aria-label="Mostrar Combustíveis" data-i18n-attr="aria-label:choose4" aria-current="false"></button><button class="carousel-dot" type="button" aria-label="Mostrar E-commerce" data-i18n-attr="aria-label:choose5" aria-current="false"></button></div></div>
+          <span class="sr-only carousel-status" role="status" aria-live="polite" aria-atomic="true"></span>
+        </div>
+
+        <div class="projects-grid project-archive">
+          <div id="pizzadesk">
+            <article class="card project-card"><div class="project-body">
+              <h3 data-i18n="pizzaTitle">PizzaDesk — sistema para pizzarias</h3>
+              <p class="project-intro" data-i18n="pizzaIntro">Uma plataforma que conecta o pedido do cliente à operação da pizzaria, do cardápio online à entrega e ao caixa.</p>
+              <dl class="case">
+                <dt data-i18n="newFlowLabel">Experiência</dt><dd data-i18n="pizzaFlow">O cliente escolhe tamanho, sabores e borda pelo link da pizzaria. O pedido chega ao quadro da cozinha, enquanto o entregador acessa as entregas e as rotas pelo celular.</dd>
+                <dt data-i18n="newFeaturesLabel">Recursos</dt><dd data-i18n="pizzaFeatures">Cardápio online, quadro de pedidos ao vivo, impressão de pedidos, acompanhamento de entregas e controle de caixa.</dd>
+              </dl>
+              <div class="repo-links"><a class="repo-link" href="https://pizzadesk.app" target="_blank" rel="noopener noreferrer" data-i18n="showcaseLive">Ver no ar ↗</a></div>
+            </div></article>
+          </div>
+          <div id="rosi">
+            <article class="card project-card"><div class="project-body">
+              <h3 data-i18n="rosiTitle">RosiConfeitaria — Confeitaria Rosilene Félix</h3>
+              <p class="project-intro" data-i18n="rosiIntro">Uma vitrine e experiência de encomenda online para a Confeitaria Rosilene Félix, confeitaria artesanal de Aracati, Ceará.</p>
+              <dl class="case">
+                <dt data-i18n="newFlowLabel">Experiência</dt><dd data-i18n="rosiFlow">O cliente explora kits de festa, escolhe tamanho e sabores do bolo e adiciona doces à sacola para montar a encomenda da sua comemoração.</dd>
+                <dt data-i18n="newFeaturesLabel">Recursos</dt><dd data-i18n="rosiFeatures">Catálogo de bolos e doces, combos personalizáveis, sacola e informações sobre datas de encomenda, sinal, retirada e entrega.</dd>
+              </dl>
+              <div class="repo-links"><a class="repo-link" href="https://rosilenefelix.vercel.app" target="_blank" rel="noopener noreferrer" data-i18n="showcaseLive">Ver no ar ↗</a></div>
+            </div></article>
+          </div>
+
 
           <!-- LOTE 001 · SINC -->
-          <div class="reveal featured" id="sinc">
+          <div class="featured" id="sinc">
             <article class="card project-card">
               <div class="label-head"><span><span data-i18n="lote">Lote</span> 001 · Sinc</span><svg class="barcode" data-barcode="SINC" aria-hidden="true"></svg></div>
               <div class="cols">
@@ -1988,7 +2105,7 @@
           </div>
 
           <!-- LOTE 002 · ARMAZÉM (v1 refugo e avarias + v2 inventário publicadas) -->
-          <div class="reveal featured" id="armazem">
+          <div class="featured" id="armazem">
             <article class="card project-card">
               <div class="label-head"><span><span data-i18n="lote">Lote</span> 002 · <span data-i18n="loteArm">Armazém</span></span><svg class="barcode" data-barcode="WAREHOUSE-LOSS" aria-hidden="true"></svg></div>
               <div class="cols">
@@ -2066,7 +2183,7 @@
           </div>
 
           <!-- LOTE 003 · COMBUSTÍVEL -->
-          <div class="reveal" id="combustivel" style="--d:.05s">
+          <div class="project-source" id="combustivel" style="--d:.05s">
             <article class="card project-card">
               <div class="label-head"><span><span data-i18n="lote">Lote</span> 003 · ANP</span><svg class="barcode" data-barcode="LOGISTICS-DISTRIBUTION" aria-hidden="true"></svg></div>
               <div class="demo" aria-hidden="true">
@@ -2137,7 +2254,7 @@
           </div>
 
           <!-- LOTE 004 · E-COMMERCE -->
-          <div class="reveal" id="ecommerce" style="--d:.1s">
+          <div class="project-source" id="ecommerce" style="--d:.1s">
             <article class="card project-card">
               <div class="label-head"><span><span data-i18n="lote">Lote</span> 004 · Olist</span><svg class="barcode" data-barcode="ECOMMERCE-SALES" aria-hidden="true"></svg></div>
               <div class="demo" aria-hidden="true">
@@ -2355,11 +2472,11 @@
     <div class="colophon">
       <div>
         <h5 data-i18n="colH1">colofão</h5>
-        <p data-i18n="colP1">Sem template nem framework: <b>HTML, CSS e JavaScript</b> num único arquivo, com os dados do GitHub consultados ao vivo. Tipografia em <b>Geist</b> e <b>Geist Mono</b>. Movimento só com <i>transform</i> e <i>opacity</i>, para rodar liso até em celular simples.</p>
+        <p data-i18n="colP1">Sem template nem framework: <b>HTML, CSS e JavaScript</b>, com os dados do GitHub consultados ao vivo. Tipografia em <b>Geist</b> e <b>Geist Mono</b>. Movimento só com <i>transform</i> e <i>opacity</i>, para rodar liso até em celular simples.</p>
       </div>
       <div>
         <h5 data-i18n="colH2">versão</h5>
-        <p><span data-i18n="colUpd">Última atualização:</span> <b>2026-11-02</b><br>
+        <p><span data-i18n="colUpd">Última atualização:</span> <b>2026-11-24</b><br>
           <span data-i18n="colHost">Hospedado no GitHub Pages</span></p>
       </div>
       <p class="fine"><span>© <span id="year"></span> Alexandre Lopes</span><span data-i18n="loc">Ceará, BR · UTC−3</span></p>
@@ -2383,6 +2500,11 @@
   </div>
 
   <!-- ── SCRIPTS ── -->
+  <dialog class="project-dialog" id="project-dialog" aria-labelledby="project-dialog-title">
+    <div class="project-dialog-head"><span data-i18n="projectDetailsLabel">sobre o projeto</span><button class="project-close" type="button" aria-label="Fechar detalhes do projeto" data-i18n-attr="aria-label:projectClose">×</button></div>
+    <div class="project-dialog-content"></div>
+  </dialog>
+
   <script>
   (() => {
     const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -2410,6 +2532,50 @@
 
     /* ── DICIONÁRIO EN (o PT fica no próprio HTML) ── */
     const EN = {
+      "carouselAria": "Featured projects carousel",
+      "carouselRole": "carousel",
+      "slideRole": "slide",
+      "carouselPrev": "Previous project",
+      "carouselNext": "Next project",
+      "carouselHint": "drag to explore",
+      "showcaseDetails": "View details",
+      "showcaseLive": "Visit site ↗",
+      "projectClose": "Close project details",
+      "projectDetailsLabel": "about the project",
+      "pizzaTitle": "PizzaDesk — pizzeria platform",
+      "pizzaIntro": "A platform connecting the customer’s order to the pizzeria’s operation, from the online menu to delivery and the cash register.",
+      "pizzaFlow": "Customers choose sizes, flavors and crusts from the pizzeria’s link. Orders arrive on the kitchen board, while couriers access their deliveries and routes on their phones.",
+      "pizzaFeatures": "Online menu, live order board, order printing, delivery tracking and cash register management.",
+      "rosiTitle": "RosiConfeitaria — Confeitaria Rosilene Félix",
+      "rosiIntro": "An online storefront and ordering experience for Confeitaria Rosilene Félix, an artisan bakery in Aracati, Ceará.",
+      "rosiFlow": "Customers explore party bundles, choose cake sizes and flavors, and add sweets to their bag to assemble their celebration order.",
+      "rosiFeatures": "Cake and sweets catalog, customizable party bundles, shopping bag and information about ordering dates, deposits, pickup and delivery.",
+      "newFlowLabel": "Experience",
+      "newFeaturesLabel": "Features",
+      "kind0": "Pizzeria platform",
+      "summary0": "Online menu, orders, deliveries and cash register in one place.",
+      "preview0": "Screenshot of PizzaDesk",
+      "choose0": "Show PizzaDesk",
+      "kind1": "Barbershop SaaS",
+      "summary1": "Bookings, commissions, inventory and finances for real barbershops.",
+      "preview1": "Screenshot of Sinc",
+      "choose1": "Show Sinc",
+      "kind2": "Artisan bakery",
+      "summary2": "Cakes, sweets and party bundles in an online ordering experience.",
+      "preview2": "Screenshot of RosiConfeitaria",
+      "choose2": "Show RosiConfeitaria",
+      "kind3": "Operations analytics",
+      "summary3": "Damage and inventory data turned into warehouse decisions.",
+      "preview3": "Screenshot of Armazém",
+      "choose3": "Show Armazém",
+      "kind4": "Public data · ANP",
+      "summary4": "An analysis of 2.6 million prices to understand diesel costs.",
+      "preview4": "Screenshot of Combustíveis",
+      "choose4": "Show Combustíveis",
+      "kind5": "Sales data · Olist",
+      "summary5": "The impact of delivery delays on customer satisfaction and revenue.",
+      "preview5": "Screenshot of E-commerce",
+      "choose5": "Show E-commerce",
       navAria: 'Main navigation', homeAria: 'Home', heroAria: 'Introduction', themeAria: 'Toggle light/dark theme',
       navSobre: 'About', navDados: 'Data', navProjetos: 'Projects', navContato: 'Contact',
       focoLabel: 'focus', focoAria: 'Portfolio focus', focoGeral: 'All', focoDados: 'Data',
@@ -2505,7 +2671,7 @@
       contatoLead: 'I enjoy problems that involve data, performance and real systems. If you have one like that, or just want to talk about one of the projects, reach out.',
       cvBtn: 'Download resume (PDF)',
       colH1: 'colophon',
-      colP1: 'No template, no framework: <b>HTML, CSS and JavaScript</b> in a single file, with GitHub data fetched live. Typeset in <b>Geist</b> and <b>Geist Mono</b>. Motion uses only <i>transform</i> and <i>opacity</i>, so it stays smooth even on low-end phones.',
+      colP1: 'No template, no framework: <b>HTML, CSS and JavaScript</b>, with GitHub data fetched live. Typeset in <b>Geist</b> and <b>Geist Mono</b>. Motion uses only <i>transform</i> and <i>opacity</i>, so it stays smooth even on low-end phones.',
       colH2: 'version', colUpd: 'Last updated:', colHost: 'Hosted on GitHub Pages',
       cvGeral: 'Computer Science · IFCE (5th semester) — Software Development &amp; Data Analysis',
       cvDev: 'Computer Science · IFCE (5th semester) — Software Development focus',
@@ -3410,5 +3576,6 @@ ORDER  BY pct DESC;`,
   })();
   </script>
 
+  <script src="projects.js"></script>
 </body>
 </html>
